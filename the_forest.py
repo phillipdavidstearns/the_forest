@@ -96,7 +96,7 @@ def extract_frames(packets, data):
 		except:
 			print("trippin...")
 			byte = 0
-		chunk.append(byte(byte))
+		chunk.append(byte)
 		print(chunk)
 		print(len(chunk))
 		sys.exit(0)
