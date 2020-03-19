@@ -100,7 +100,7 @@ def extract_frames(packets, data):
 		chunk.append(_byte)
 		print(chunk)
 		print(len(chunk))
-		sys.exit(0)
+	sys.exit(0)
 	packets = packets[frames:]
 	return chunk
 
