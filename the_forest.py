@@ -86,11 +86,13 @@ def extract_frames(buffer, frames=4):
 	# assemble frames into chunk
 	for i in range(frames):
 		try:
-			frame = buffer[i]
+			frame = buffer[frames]
 			if PRINT: print(chr(frame),end='')
 		except:
 			frame = 0
 		chunk.append(frame)
+		print(len(chunk))
+		sys.exit(0)
 	buffer = buffer[frames:]
 	return chunk
 
