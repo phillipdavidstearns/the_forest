@@ -100,11 +100,11 @@ def write_packets(packets):
 	print(packets)
 	return
 
-def shutdown(PyAudio, socket_list):
+def shutdown(socket):
 	# bring down the pyaudio stream
 	print('Closing socket '+str(IFACE)+'...')
 	try:
-		s.close()
+		socket.close()
 	except:
 		print("Error closing socket.")
 	print('Peace out!')
@@ -112,13 +112,13 @@ def shutdown(PyAudio, socket_list):
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	print('\nSIGINT received!')
-	shutdown(PA, sockets)
+	print("\n"+str(sig)+ "received!")
+	shutdown(s)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	print('\nSIGTERM received!')
-	shutdown(PA, sockets)
+	print("\n"+str(sig)+ "received!")
+	shutdown(s)
 
 def main():
 	# interrupt and terminate signal handling
