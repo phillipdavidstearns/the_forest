@@ -62,22 +62,20 @@ except:
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
 
-def read_sockets(buffer):
+def read_sockets(socket, buffer):
 	if SOCKET_BLOCKING:
-		readable,_,_ = select.select(s, [], [], TIMEOUT)
+		readable,_,_ = select.select(socket, [], [], TIMEOUT)
 		for s in readable:
 			try:
-				data, interface = s.recvfrom(65536)
+				data = s.recvfrom(65536)
 				if data:
-					if interface[0]==IFACE:
-						buffer[n] += data
+					buffer += data
 			except:
 				pass
 	else:
-
 		if len(buffer) < 65536:
 			try:
-				data = s.recv(65536)
+				data = socket.recv(65536)
 				if data:
 					buffer += data
 			except:
@@ -112,12 +110,12 @@ def shutdown(socket):
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	print("\n"+str(sig)+ "received!")
+	print("\nInterrupt code: "+str(sig)+ " received!")
 	shutdown(s)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	print("\n"+str(sig)+ "received!")
+	print("\nInterrupt code: "+str(sig)+ " received!")
 	shutdown(s)
 
 def main():
@@ -130,7 +128,7 @@ def main():
 	while True:
 		#give the processor a rest
 		time.sleep(1/CHUNK)
-		read_sockets(packets)
+		read_sockets(s, packets)
 		write_packets(extract_frames(packets))
 
 main()
