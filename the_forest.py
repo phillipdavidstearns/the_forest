@@ -105,10 +105,10 @@ def write_packets(packets):
 def shutdown(PyAudio, socket_list):
 	# bring down the pyaudio stream
 	print('Closing socket '+str(IFACE)+'...')
-		try:
-			s.close()
-		except:
-			print("Error closing socket.")
+	try:
+		s.close()
+	except:
+		print("Error closing socket.")
 	print('Peace out!')
 	sys.exit(0)
 
