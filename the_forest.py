@@ -90,8 +90,9 @@ def extract_frames(buffer, bytes):
 			print(str(i),end=', ')
 			if PRINT: print(chr(byte),end='')
 		except:
-			frame = 0
-		chunk.append(frame)
+			byte = 0
+		chunk.append(byte)
+		print(chunk)
 		print(len(chunk))
 		sys.exit(0)
 	buffer = buffer[frames:]
