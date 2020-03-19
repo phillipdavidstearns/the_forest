@@ -55,7 +55,7 @@ print("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
 try:
-	s.bind(IFACE, 0)
+	s.bind((IFACE, 0))
 except:
 	print("Failed to bind to interface: " + IFACE)
 	sys.exit(1)
@@ -63,4 +63,77 @@ s.setblocking(SOCKET_BLOCKING)
 
 print(s)
 sys.exit(0)
+
+def read_sockets(buffer):
+	if SOCKET_BLOCKING:
+		readable,_,_ = select.select(s, [], [], TIMEOUT)
+		for s in readable:
+			try:
+				data, interface = s.recvfrom(65536)
+				if data:
+					if interface[0]==IFACE:
+						buffer[n] += data
+			except:
+				pass
+	else:
+
+		if len(buffer) < 65536:
+			try:
+				data = s.recv(65536)
+				if data:
+					buffer += data
+			except:
+				pass
+
+def extract_frames(buffer, frames=4):
+	chunk = bytearray()
+	# assemble frames into chunk
+	for i in range(frames):
+		try:
+			frame = buffer[i]
+			if PRINT: print(chr(frame),end='')
+		except:
+			frame = 0
+		chunk.append(frame)
+	buffer = buffer[frames:]
+	return chunk
+
+def write_packets(packets):
+	print(packets)
+	return
+
+def shutdown(PyAudio, socket_list):
+	# bring down the pyaudio stream
+	print('Closing socket '+str(IFACE)+'...')
+		try:
+			s.close()
+		except:
+			print("Error closing socket.")
+	print('Peace out!')
+	sys.exit(0)
+
+# catch control+c
+def SIGINT_handler(sig, frame):
+	print('\nSIGINT received!')
+	shutdown(PA, sockets)
+
+# catch termination signals from the system
+def SIGTERM_handler(sig, frame):
+	print('\nSIGTERM received!')
+	shutdown(PA, sockets)
+
+def main():
+	# interrupt and terminate signal handling
+	signal(SIGINT, SIGINT_handler)
+	signal(SIGTERM, SIGTERM_handler)
+
+	print("Sniffing packets...")
+
+	while True:
+		#give the processor a rest
+		time.sleep(1/CHUNK)
+		read_sockets(packets)
+		write_packets(extract_frame(packets))
+
+main()
 
