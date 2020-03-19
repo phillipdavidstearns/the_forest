@@ -82,7 +82,7 @@ def read_sockets(socket, buffer):
 				pass
 
 def extract_frames(buffer, frames=4):
-	chunk = bytearray()
+	chunk = []
 	# assemble frames into chunk
 	for i in range(frames):
 		try:
