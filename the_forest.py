@@ -109,13 +109,13 @@ def shutdown(socket):
 	sys.exit(0)
 
 # catch control+c
-def SIGINT_handler(sig, frame):
-	print("\nInterrupt code: "+str(sig)+ " received!")
+def SIGINT_handler(sig, frame)
+	print('\nInterrupt code: ' +str(sig) + ' received!')
 	shutdown(s)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	print("\nInterrupt code: "+str(sig)+ " received!")
+	print('\nInterrupt code: ' +str(sig) + 'received!')
 	shutdown(s)
 
 def main():
