@@ -84,7 +84,7 @@ def read_sockets(socket, packets):
 				pass
 
 def extract_frames(packets, data):
-	print(buffer)
+	print(packets)
 	chunk = []
 	# assemble bytes into chunk
 	for i in range(data):
