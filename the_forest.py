@@ -31,6 +31,7 @@ ap.add_argument("-c", "--chunk-size", type=int, default=2048, required=False, he
 ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help="frames per second")
 ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
 ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
+ap.add_argument("-b", "--bytes", type=int, default=4, required=False, help="number of bytes to display per frame")
 args = ap.parse_args()
 
 packets = []
@@ -38,6 +39,7 @@ SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNK = args.chunk_size
 RATE = args.frame_rate
+BYTES = arg.bytes
 
 if args.timeout > 0.0:
 	TIMEOUT = args.timeout
@@ -83,11 +85,12 @@ def read_sockets(socket, buffer):
 
 def extract_frames(buffer, bytes):
 	chunk = []
-	# assemble frames into chunk
+	# assemble bytes into chunk
 	for i in range(bytes):
 		try:
 			byte = buffer[i]
 			print(str(i),end=', ')
+			print("")
 			if PRINT: print(chr(byte),end='')
 		except:
 			byte = 0
@@ -100,6 +103,10 @@ def extract_frames(buffer, bytes):
 
 def write_packets(packets):
 	print(packets)
+	for p in range(packets):
+		for i in range(8):
+			print(str(i>>8&1),end='')
+	print("")
 	return
 
 def shutdown(socket):
@@ -133,7 +140,7 @@ def main():
 		#give the processor a rest
 		time.sleep(1/CHUNK)
 		read_sockets(s, packets)
-		write_packets(extract_frames(packets))
+		write_packets(extract_frames(packets,bytes))
 
 main()
 
