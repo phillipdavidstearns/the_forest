@@ -48,7 +48,7 @@ PRINT = args.print_packet
 # sanity check to confirm argument parsing
 
 print("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
-print("INTERFACE: " + str(interfaces))
+print("INTERFACE: " + str(IFACE))
 print("CHUNK SIZE: " + str(CHUNK))
 print("FRAME RATE: " + str(RATE))
 print("SOCKET TIMEOUT: " + str(TIMEOUT))
