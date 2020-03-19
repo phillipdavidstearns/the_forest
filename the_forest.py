@@ -31,7 +31,7 @@ ap.add_argument("-c", "--chunk-size", type=int, default=2048, required=False, he
 ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help="frames per second")
 ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
 ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
-ap.add_argument("-b", "--bytes", type=int, default=4, required=False, help="number of bytes to display per frame")
+ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
 args = ap.parse_args()
 
 packets = []
@@ -39,7 +39,7 @@ SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNK = args.chunk_size
 RATE = args.frame_rate
-BYTES = args.bytes
+BYTES = args.frame_size
 
 if args.timeout > 0.0:
 	TIMEOUT = args.timeout
