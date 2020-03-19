@@ -86,7 +86,7 @@ def read_sockets(socket, packets):
 def extract_frames(packets, data):
 	print(data)
 	print(packets)
-	chunk = bytearray()
+	chunk = []
 	# assemble bytes into chunk
 	for i in range(data):
 		try:
@@ -98,9 +98,7 @@ def extract_frames(packets, data):
 			print("trippin...")
 			_byte = 0
 		chunk.append(_byte)
-		print(chunk)
-		print(len(chunk))
-	sys.exit(0)
+	print(chunk)
 	packets = packets[frames:]
 	return chunk
 
