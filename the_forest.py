@@ -33,7 +33,7 @@ ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help
 ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
 args = ap.parse_args()
 
-SOCKET_BLOCKING
+SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNIK = args.chunk_size
 FRAME = args.frame_rate
