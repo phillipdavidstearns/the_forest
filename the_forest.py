@@ -99,7 +99,7 @@ def extract_frames(packets, data):
 			_byte = 0
 		chunk.append(_byte)
 	print(chunk)
-	packets = packets[frames:]
+	packets = packets[data:]
 	return chunk
 
 def write_packets(packets):
