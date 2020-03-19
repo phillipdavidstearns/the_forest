@@ -35,7 +35,7 @@ args = ap.parse_args()
 
 SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
-CHUNIK = args.chunk_size
+CHUNK = args.chunk_size
 FRAME = args.frame_rate
 
 if args.timeout > 0.0:
