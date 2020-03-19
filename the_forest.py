@@ -64,42 +64,43 @@ except:
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
 
-def read_sockets(socket, buffer):
+def read_sockets(socket, packets):
 	if SOCKET_BLOCKING:
 		readable,_,_ = select.select(socket, [], [], TIMEOUT)
 		for s in readable:
 			try:
 				data = s.recvfrom(65536)
 				if data:
-					buffer += data
+					packets += data
 			except:
 				pass
 	else:
-		if len(buffer) < 65536:
+		if len(packets) < 65536:
 			try:
 				data = socket.recv(65536)
 				if data:
-					buffer += data
+					packets += data
 			except:
 				pass
 
-def extract_frames(buffer, data):
+def extract_frames(packets, data):
 	print(buffer)
 	chunk = []
 	# assemble bytes into chunk
 	for i in range(data):
 		try:
-			byte = buffer[i]
+			byte = packets[i]
 			print(str(i),end=', ')
 			print("")
 			if PRINT: print(chr(byte),end='')
 		except:
+			print("trippin...")
 			byte = 0
-		chunk.append(byte)
+		chunk+=byte
 		print(chunk)
 		print(len(chunk))
 		sys.exit(0)
-	buffer = buffer[frames:]
+	packets = packets[frames:]
 	return chunk
 
 def write_packets(packets):
