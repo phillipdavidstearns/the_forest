@@ -131,7 +131,7 @@ def main():
 		#give the processor a rest
 		time.sleep(1/CHUNK)
 		read_sockets(packets)
-		write_packets(extract_frame(packets))
+		write_packets(extract_frames(packets))
 
 main()
 
