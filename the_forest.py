@@ -61,9 +61,6 @@ except:
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
 
-print(s)
-sys.exit(0)
-
 def read_sockets(buffer):
 	if SOCKET_BLOCKING:
 		readable,_,_ = select.select(s, [], [], TIMEOUT)
