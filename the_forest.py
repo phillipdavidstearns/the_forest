@@ -20,7 +20,6 @@ import socket
 import pyaudio
 import time
 import select
-import re
 
 if os.getuid() != 0:
 	print("Must be run as root.")
@@ -47,10 +46,21 @@ else:
 
 PRINT = args.print_packet
 
+# sanity check to confirm argument parsing
+
+print("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
+print("INTERFACE: " + str(interfaces))
+print("CHUNK SIZE: " + str(CHUNK))
+print("FRAME RATE: " + str(RATE))
+print("SOCKET TIMEOUT: " + str(TIMEOUT))
+
 s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
 try:
 	s.bind(IFACE, 0)
 except:
 	print("Failed to bind to interface: "+IFACE)
 	sys.exit(1)
+
+print(s)
+sys.exit(0)
 
