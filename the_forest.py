@@ -81,13 +81,14 @@ def read_sockets(socket, buffer):
 			except:
 				pass
 
-def extract_frames(buffer, frames=4):
+def extract_frames(buffer, bytes):
 	chunk = []
 	# assemble frames into chunk
-	for i in range(frames):
+	for i in range(bytes):
 		try:
-			frame = buffer[frames]
-			if PRINT: print(chr(frame),end='')
+			byte = buffer[i]
+			print(str(i),end=', ')
+			if PRINT: print(chr(byte),end='')
 		except:
 			frame = 0
 		chunk.append(frame)
