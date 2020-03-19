@@ -57,8 +57,9 @@ s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
 try:
 	s.bind(IFACE, 0)
 except:
-	print("Failed to bind to interface: "+IFACE)
+	print("Failed to bind to interface: " + IFACE)
 	sys.exit(1)
+s.setblocking(SOCKET_BLOCKING)
 
 print(s)
 sys.exit(0)
