@@ -17,7 +17,6 @@ import sys
 import argparse
 from signal import *
 import socket
-import pyaudio
 import time
 import select
 
