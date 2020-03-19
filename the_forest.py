@@ -39,7 +39,7 @@ SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNK = args.chunk_size
 RATE = args.frame_rate
-BYTES = arg.bytes
+BYTES = args.bytes
 
 if args.timeout > 0.0:
 	TIMEOUT = args.timeout
