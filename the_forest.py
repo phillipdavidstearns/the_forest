@@ -83,10 +83,10 @@ def read_sockets(socket, buffer):
 			except:
 				pass
 
-def extract_frames(buffer, bytes):
+def extract_frames(buffer, data):
 	chunk = []
 	# assemble bytes into chunk
-	for i in range(bytes):
+	for i in range(data):
 		try:
 			byte = buffer[i]
 			print(str(i),end=', ')
@@ -140,7 +140,7 @@ def main():
 		#give the processor a rest
 		time.sleep(1/CHUNK)
 		read_sockets(s, packets)
-		write_packets(extract_frames(packets,bytes))
+		write_packets(extract_frames(packets,BYTES))
 
 main()
 
