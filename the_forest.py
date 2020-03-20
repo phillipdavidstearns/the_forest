@@ -91,8 +91,6 @@ def extract_frames(packets, data):
 	for i in range(data):
 		try:
 			_byte = packets[i]
-			print(str(i),end=', ')
-			print("")
 			if PRINT: print(chr(_byte),end='')
 		except:
 			print("trippin...")
@@ -104,9 +102,9 @@ def extract_frames(packets, data):
 
 def write_packets(packets):
 	print(packets)
-	for p in range(packets):
+	for p in packets:
 		for i in range(8):
-			print(str(i>>8&1),end='')
+			print(str(p>>8&1),end='')
 	print("")
 	return
 
