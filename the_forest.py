@@ -101,6 +101,7 @@ debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 #
 
 def read_sockets(socket, packets):
+	print("Reading socket")
 	if SOCKET_BLOCKING:
 		readable,_,_ = select.select([socket], [], [], TIMEOUT)
 		for s in readable:
@@ -202,6 +203,7 @@ def main():
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
 		read_sockets(s, packets)
+		print(packets)
 
 main()
 
