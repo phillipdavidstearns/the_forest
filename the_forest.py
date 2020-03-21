@@ -201,6 +201,7 @@ def main():
 				print(message)
 				if message == "exit":
 					print("Closing connection...")
+					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 
 	# debug("Sniffing packets...")
