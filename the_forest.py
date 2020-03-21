@@ -151,12 +151,12 @@ def debug(message):
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	print('\nInterrupt code: ' +str(sig) + ' received!')
+	print("\nInterrupt code: " + str(sig) + " received!")
 	shutdown(s)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	print('\nInterrupt code: ' +str(sig) + 'received!')
+	print("\nInterrupt code: "  + str(sig) + " received!")
 	shutdown(s)
 
 #------------------------------------------------------------------------
@@ -175,7 +175,7 @@ def shutdownIO():
 def main():
 
 	global packets
-	
+
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
