@@ -139,6 +139,7 @@ def shutdownIO():
 	IO.disable()
 	IO.clear()
 	IO.cleanup()
+
 #------------------------------------------------------------------------
 # main
 
@@ -183,4 +184,6 @@ def main():
 					conn.close()
 					break
 
-main()
+
+if __name__ == '__main__':
+	main()
