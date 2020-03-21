@@ -69,10 +69,6 @@ try:
 except:
 	print("Could not bind socket")
 
-read_sockets(s,packets)
-print(packets)
-sys.exit(0)
-
 #------------------------------------------------------------------------
 #	verbose or debug mode
 
@@ -191,15 +187,17 @@ def main():
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
-	startupIO()
+	# startupIO()
 
-	debug("Sniffing packets...")
+	# debug("Sniffing packets...")
 
-	while True:
-		#give the processor a rest
-		time.sleep(1/RATE)
-		read_sockets(s, packets)
-		write_bytes(extract_bytes(BYTES))
-
+	# while True:
+	# 	#give the processor a rest
+	# 	time.sleep(1/RATE)
+	# 	read_sockets(s, packets)
+	# 	write_bytes(extract_bytes(BYTES))
+	read_sockets(s, packets)
+	print(packets)
+	
 main()
 
