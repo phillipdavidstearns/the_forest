@@ -83,12 +83,12 @@ debug("FRAME RATE: " + str(RATE))
 debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
+s.setblocking(SOCKET_BLOCKING)
 try:
 	s.bind((IFACE, 0))
 except:
 	debug("Failed to bind to interface: " + IFACE)
 	sys.exit(1)
-s.setblocking(SOCKET_BLOCKING)
 
 #------------------------------------------------------------------------
 #
