@@ -67,7 +67,7 @@ def SIGINT_handler(sig, frame):
 	shutdown(s, sig)
 
 # catch termination signals from the system
-def SIGTERM_handler(socket, sig, frame):
+def SIGTERM_handler(sig, frame):
 	shutdown(s, sig)
 
 #------------------------------------------------------------------------
