@@ -139,19 +139,9 @@ def write_bytes(data):
 #------------------------------------------------------------------------
 #
 
-def shutdown(socket):
-	# bring down the pyaudio stream
-	debug('Closing socket '+str(IFACE)+'...')
-	try:
-		socket.close()
-	except:
-		debug("Error closing socket.")
-	debug('Shutting down GPIO...')
-	try:
-		shutdownIO()
-	except:
-		debug("Error shutting down GPIO.")
-	debug('Peace out!')
+def shutdown(sig):
+	debug("\nInterrupt code: " + str(sig) + " received!")
+	shutdownIO()
 	sys.exit(0)
 
 #------------------------------------------------------------------------
@@ -159,13 +149,11 @@ def shutdown(socket):
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	debug("\nInterrupt code: " + str(sig) + " received!")
-	shutdown(s)
+	shutdown(sig)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	debug("\nInterrupt code: "  + str(sig) + " received!")
-	shutdown(s)
+	shutdown(sig)
 
 #------------------------------------------------------------------------
 # main
@@ -188,23 +176,23 @@ def main():
 	# startupIO()
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
-
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-# s.setblocking(SOCKET_BLOCKING)
-		try:
-			s.bind((HOST, TCP_PORT))
-		except:
-			print("Could not bind socket")
-		s.listen(1)
-		conn, addr = s.accept()
-		with conn:
-			print('Connected from', addr)
-			while True:
-				data = conn.recv(CHUNK)
-				if not data: break
-				message = data.decode('UTF-8')
-				print(message)
-				if message == "exit": s.close()
+	while True:
+		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		# s.setblocking(SOCKET_BLOCKING)
+			try:
+				s.bind((HOST, TCP_PORT))
+			except:
+				print("Could not bind socket")
+			s.listen(1)
+			conn, addr = s.accept()
+			with conn:
+				print('Connected from', addr)
+				while True:
+					data = conn.recv(CHUNK)
+					if not data: break
+					message = data.decode('UTF-8').split('\r')[0]
+					print(message)
+					if message == "exit": s.close()
 
 	# debug("Sniffing packets...")
 
