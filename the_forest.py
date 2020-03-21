@@ -101,7 +101,7 @@ debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 def read_sockets(socket, packets):
 	if SOCKET_BLOCKING:
-		readable,_,_ = select.select(socket, [], [], TIMEOUT)
+		readable,_,_ = select.select([socket], [], [], TIMEOUT)
 		for s in readable:
 			try:
 				data = s.recvfrom(65536)
@@ -202,4 +202,9 @@ def main():
 		print(packets)
 
 main()
+
+#----------------------------------
+
+
+
 
