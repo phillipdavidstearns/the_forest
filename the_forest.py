@@ -61,16 +61,9 @@ TIMEOUT=10
 
 LOCAL_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
 TCP_IP = LOCAL_IP
+HOST = ''
 TCP_PORT = 31337
 BUFFER_SIZE = 1024
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setblocking(SOCKET_BLOCKING)
-try:
-	s.bind((TCP_IP, TCP_PORT))
-except:
-	print("Could not bind socket")
-s.listen(1)
 
 #------------------------------------------------------------------------
 #	verbose or debug mode
@@ -101,24 +94,23 @@ debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 #
 
 def read_sockets(socket, packets):
-	print("Reading socket")
 	if SOCKET_BLOCKING:
 		readable,_,_ = select.select([socket], [], [], TIMEOUT)
 		for s in readable:
 			try:
 				data = s.recvfrom(CHUNK)
+				print(data)
 				if data:
 					packets += data
-					print(packets)
 			except:
 				pass
 	else:
 		if len(packets) < 65536:
 			try:
 				data = socket.recv(CHUNK)
+				print(data)
 				if data:
 					packets += data
-					print(packets)
 			except:
 				pass
 
@@ -195,15 +187,29 @@ def main():
 	signal(SIGTERM, SIGTERM_handler)
 	# startupIO()
 
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+# s.setblocking(SOCKET_BLOCKING)
+	try:
+		s.bind((HOST, TCP_PORT))
+	except:
+		print("Could not bind socket")
+	s.listen(1)
+	conn, addr = s.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(CHUNK)
+            if not data: break
+            print(data)
+
 	# debug("Sniffing packets...")
 
-	while True:
+	# while True:
 	# 	#give the processor a rest
-		time.sleep(1/RATE)
+	# 	time.sleep(1/RATE)
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
-		read_sockets(s, packets)
-		print(packets)
+	# 	read_sockets(s, packets)
 
 main()
 
