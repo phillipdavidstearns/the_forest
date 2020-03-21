@@ -29,22 +29,6 @@ def debug(message):
 	if verbose:
 		print(message)
 
-if verbose:
-	debug("Verbose mode. Displaying debug messeges")
-
-if args.timeout > 0.0:
-	TIMEOUT = args.timeout
-else:
-	TIMEOUT = 1 / CHUNK
-
-# sanity check to confirm argument parsing
-
-# debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
-debug("INTERFACE: " + str(IFACE))
-debug("CHUNK SIZE: " + str(CHUNK))
-debug("FRAME RATE: " + str(RATE))
-debug("SOCKET TIMEOUT: " + str(TIMEOUT))
-
 #------------------------------------------------------------------------
 #
 
@@ -132,6 +116,22 @@ def main():
 	TIMEOUT=10 
 	HOST = ''
 	PORT = 31337
+
+	if verbose:
+		debug("Verbose mode. Displaying debug messeges")
+
+	if args.timeout > 0.0:
+		TIMEOUT = args.timeout
+	else:
+		TIMEOUT = 1 / CHUNK
+
+	# sanity check to confirm argument parsing
+
+	# debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
+	debug("INTERFACE: " + str(IFACE))
+	debug("CHUNK SIZE: " + str(CHUNK))
+	debug("FRAME RATE: " + str(RATE))
+	debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 	# initalize TCP socket
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
