@@ -171,7 +171,7 @@ def main():
 				if not data: break
 				packets += data
 				while len(packets) > 0:
-					packets, chunk = extract_bytes(BYTES)
+					packets, chunk = extract_bytes(packets, BYTES)
 					IO.update(write_bytes(chunk))
 					time.sleep(1/RATE)
 				try:
