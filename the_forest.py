@@ -49,7 +49,6 @@ ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help=
 ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 args = ap.parse_args()
 
-packets = []
 # SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNK = args.chunk_size
@@ -87,8 +86,7 @@ debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 #------------------------------------------------------------------------
 #
 
-def extract_bytes(qty):
-	global packets
+def extract_bytes(packets, qty):
 	chunk = []
 	# assemble bytes into chunk
 	for i in range(qty):
@@ -99,7 +97,7 @@ def extract_bytes(qty):
 			_byte = 0
 		chunk.append(_byte)
 	packets = packets[qty:]
-	return chunk
+	return packets, chunk
 
 def write_bytes(data):
 	channelStates=[]
@@ -108,7 +106,7 @@ def write_bytes(data):
 			channelStates.append(b >> i & 1)
 	 		print(str(channelStates[i]),end='')
 	print("")
-	IO.update(channelStates)
+	return channelStates
 #------------------------------------------------------------------------
 #
 
@@ -130,7 +128,7 @@ def SIGTERM_handler(sig, frame):
 	shutdown(s, sig)
 
 #------------------------------------------------------------------------
-# main
+# IO up/down
 
 def startupIO():
 	IO.init(pins, channels)
@@ -141,6 +139,8 @@ def shutdownIO():
 	IO.disable()
 	IO.clear()
 	IO.cleanup()
+#------------------------------------------------------------------------
+# main
 
 def main():
 
@@ -148,8 +148,8 @@ def main():
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
 	startupIO()
-	global s
-	global packets
+
+	packets = []
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -170,7 +170,8 @@ def main():
 				if not data: break
 				packets += data
 				while len(packets) > 0:
-					write_bytes(extract_bytes(BYTES))
+					packets, chunk = extract_bytes(BYTES)
+					IO.update(write_bytes(chunk))
 					time.sleep(1/RATE)
 				try:
 					message = data.decode('UTF-8').split('\r')[0]
