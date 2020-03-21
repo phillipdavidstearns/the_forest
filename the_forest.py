@@ -59,12 +59,8 @@ BYTES = args.frame_size
 verbose=args.verbose
 TIMEOUT=10
 
-LOCAL_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
-TCP_IP = LOCAL_IP
 HOST = ''
-TCP_PORT = 31337
-BUFFER_SIZE = 1024
-s = object()
+PORT = 31337
 
 #------------------------------------------------------------------------
 #	verbose or debug mode
@@ -177,18 +173,17 @@ def main():
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
 	startupIO()
-	global s
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		# s.setblocking(SOCKET_BLOCKING)
-		try:
-			s.bind((HOST, TCP_PORT))
-		except:
-			print("Could not bind socket")
-			s.close()
-			sys.exit(1)
-		s.listen(1)
+	# s.setblocking(SOCKET_BLOCKING)
+	try:
+		s.bind((HOST, PORT))
+	except:
+		print("Could not bind socket")
+		s.close()
+		sys.exit(1)
+	s.listen(1)
 
 	while True:
 		conn, addr = s.accept()
