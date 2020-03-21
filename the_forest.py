@@ -104,7 +104,7 @@ def write_bytes(data):
 	for b in data:
 		for i in range(8):
 			channelStates.append(b >> i & 1)
-	 		print(str(channelStates[i]),end='')
+			print(str(channelStates[i]),end='')
 	print("")
 	return channelStates
 #------------------------------------------------------------------------
