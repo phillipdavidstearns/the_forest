@@ -30,10 +30,10 @@ def init(pins, channels):
 	global ENABLE
 	global CHANNELS
 
-	STROBE=pins[0][0]
-	DATA=pins[0][1]
-	CLOCK=pins[0][2]
-	ENABLE=pins[0][3]
+	STROBE=pins[0]
+	DATA=pins[1]
+	CLOCK=pins[2]
+	ENABLE=pins[3]
 	CHANNELS=channels
 
 	if STROBE == -1 or DATA == -1 or CLOCK == -1 or ENABLE == -1:
@@ -44,23 +44,8 @@ def init(pins, channels):
 		print("Number of channels must be greater than 0")
 		return
 
-	for pin in pins[0]: 
+	for pin in pins: 
 		GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
-	for pin in pins[1]: 
-		GPIO.setup(pin, GPIO.IN)
-
-def attachInterrupt(pin, mode, callback): 
-	if (mode == "falling" or mode == "FALLING"):
-		event = GPIO.FALLING
-	elif (mode == "rising" or mode == "RISING"):
-		event = GPIO.RISING
-	elif (mode == "both" or mode == "BOTH" or mode == "change" or mode == "CHANGE"):
-		event = GPIO.BOTH
-	else:
-		print("mode not recognized: "+str(mode))
-		return
-	GPIO.add_event_detect(pin, event)
-	GPIO.add_event_callback(pin, callback)
 
 def cleanup():
 	GPIO.cleanup()
