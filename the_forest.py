@@ -143,7 +143,7 @@ def write_bytes(data):
 def shutdown(socket, sig):
 	debug("\nInterrupt code: " + str(sig) + " received!")
 	shutdownIO()
-	socket.shutdown()
+	socket.shutdown(SHUT_RDWR)
 	socket.close()
 	sys.exit(0)
 
@@ -198,7 +198,7 @@ def main():
 					print(message)
 					if message == "exit":
 						print("Closing connection...")
-						s.shutdown()
+						s.shutdown(SHUT_RDWD)
 						s.close()
 
 	# debug("Sniffing packets...")
