@@ -1,0 +1,13 @@
+[Unit]
+Description=wifi_traffic: a network traffic visualizer
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/phillipstearns/the_forest/wifi_traffic.py
+RestartSec=5
+Restart=always
+TimeoutSec=10
+
+[Install]
+WantedBy=multi-user.target

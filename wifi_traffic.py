@@ -14,7 +14,6 @@
 
 import os
 import sys
-import subprocess
 import argparse
 from signal import *
 import socket
@@ -57,17 +56,6 @@ CHUNK = args.chunk_size
 RATE = args.frame_rate
 BYTES = args.frame_size
 verbose=args.verbose
-
-TCP_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
-TCP_PORT = 31337
-BUFFER_SIZE = 1024
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
-data = s.recv(BUFFER_SIZE)
-s.close()
-print "received data:", data
-sys.exit(0)
 
 #------------------------------------------------------------------------
 #	verbose or debug mode
