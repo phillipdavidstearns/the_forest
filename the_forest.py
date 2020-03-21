@@ -111,7 +111,6 @@ def extract_bytes(qty):
 			_byte = packets[i]
 			if PRINT: print(chr(_byte),end='')
 		except:
-			print("trippin...")
 			_byte = 0
 		chunk.append(_byte)
 	packets = packets[qty:]
@@ -122,23 +121,23 @@ def write_bytes(data):
 	for b in data:
 		for i in range(8):
 			channelStates.append(b >> i & 1)
-			print(str(channelStates[i]),end='')
-	print("")
+			debug(str(channelStates[i]),end='')
+	debug("")
 	IO.update(channelStates)
 
 def shutdown(socket):
 	# bring down the pyaudio stream
-	print('Closing socket '+str(IFACE)+'...')
+	debug('Closing socket '+str(IFACE)+'...')
 	try:
 		socket.close()
 	except:
-		print("Error closing socket.")
+		debug("Error closing socket.")
 	print('Shutting down GPIO...')
 	try:
 		shutdownIO()
 	except:
-		print("Error shutting down GPIO.")
-	print('Peace out!')
+		debug("Error shutting down GPIO.")
+	debug('Peace out!')
 	sys.exit(0)
 
 #------------------------------------------------------------------------
@@ -147,17 +146,18 @@ def shutdown(socket):
 def debug(message):
 	if verbose:
 		print(message)
+
 #------------------------------------------------------------------------
 #	Signal Interrupt/Terminate Handlers
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	print("\nInterrupt code: " + str(sig) + " received!")
+	debug("\nInterrupt code: " + str(sig) + " received!")
 	shutdown(s)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	print("\nInterrupt code: "  + str(sig) + " received!")
+	debug("\nInterrupt code: "  + str(sig) + " received!")
 	shutdown(s)
 
 #------------------------------------------------------------------------
