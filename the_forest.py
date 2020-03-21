@@ -54,7 +54,6 @@ def write_bytes(data):
 #
 
 def shutdown(socket, sig):
-	debug("\nInterrupt code: " + str(sig) + " received!")
 	shutdownIO()
 	socket.close()
 	sys.exit(0)
