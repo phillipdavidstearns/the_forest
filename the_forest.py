@@ -107,6 +107,7 @@ def read_sockets(socket, packets):
 				data = s.recvfrom(CHUNK)
 				if data:
 					packets += data
+					print(packets)
 			except:
 				pass
 	else:
@@ -115,6 +116,7 @@ def read_sockets(socket, packets):
 				data = socket.recv(CHUNK)
 				if data:
 					packets += data
+					print(packets)
 			except:
 				pass
 
@@ -199,7 +201,6 @@ def main():
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
 		read_sockets(s, packets)
-		print(packets)
 
 main()
 
