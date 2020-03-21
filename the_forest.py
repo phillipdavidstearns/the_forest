@@ -59,7 +59,8 @@ BYTES = args.frame_size
 verbose=args.verbose
 TIMEOUT=10
 
-TCP_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
+LOCAL_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
+TCP_IP = '0,0,0,0'
 TCP_PORT = 31337
 BUFFER_SIZE = 1024
 
