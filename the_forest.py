@@ -104,16 +104,15 @@ def read_sockets(socket, packets):
 		readable,_,_ = select.select([socket], [], [], TIMEOUT)
 		for s in readable:
 			try:
-				data = s.recvfrom(65536)
+				data = s.recvfrom(CHUNK)
 				if data:
 					packets += data
-					print(packets)
 			except:
 				pass
 	else:
 		if len(packets) < 65536:
 			try:
-				data = socket.recv(65536)
+				data = socket.recv(CHUNK)
 				if data:
 					packets += data
 			except:
