@@ -40,18 +40,17 @@ enable = 23 # IOister enable GPIO pin
 pins = [ strobe, data, clock, enable ]
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
+# ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
 ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
-ap.add_argument("-c", "--chunk-size", type=int, default=2048, required=False, help="chunk size in frames") # not sure if I need this
-ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help="frames per second")
+ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
+ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
 ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
-ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
 ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
 ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 args = ap.parse_args()
 
 packets = []
-SOCKET_BLOCKING = args.socket_blocking
+# SOCKET_BLOCKING = args.socket_blocking
 IFACE = args.interface
 CHUNK = args.chunk_size
 RATE = args.frame_rate
@@ -77,11 +76,9 @@ if args.timeout > 0.0:
 else:
 	TIMEOUT = 1 / CHUNK
 
-PRINT = args.print_packet
-
 # sanity check to confirm argument parsing
 
-debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
+# debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
 debug("INTERFACE: " + str(IFACE))
 debug("CHUNK SIZE: " + str(CHUNK))
 debug("FRAME RATE: " + str(RATE))
@@ -89,27 +86,6 @@ debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 #------------------------------------------------------------------------
 #
-
-def read_sockets(socket, packets):
-	if SOCKET_BLOCKING:
-		readable,_,_ = select.select([socket], [], [], TIMEOUT)
-		for s in readable:
-			try:
-				data = s.recvfrom(CHUNK)
-				print(data)
-				if data:
-					packets += data
-			except:
-				pass
-	else:
-		if len(packets) < 65536:
-			try:
-				data = socket.recv(CHUNK)
-				print(data)
-				if data:
-					packets += data
-			except:
-				pass
 
 def extract_bytes(qty):
 	global packets
@@ -130,8 +106,8 @@ def write_bytes(data):
 	for b in data:
 		for i in range(8):
 			channelStates.append(b >> i & 1)
-	# 		print(str(channelStates[i]),end='')
-	# print("")
+	 		print(str(channelStates[i]),end='')
+	print("")
 	IO.update(channelStates)
 #------------------------------------------------------------------------
 #
@@ -139,7 +115,6 @@ def write_bytes(data):
 def shutdown(socket, sig):
 	debug("\nInterrupt code: " + str(sig) + " received!")
 	shutdownIO()
-	#socket.shutdown(socket.SHUT_RDWR)
 	socket.close()
 	sys.exit(0)
 
@@ -178,11 +153,10 @@ def main():
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	# s.setblocking(SOCKET_BLOCKING)
 	try:
 		s.bind((HOST, PORT))
 	except:
-		print("Could not bind socket")
+		debug("Could not bind socket")
 		s.close()
 		sys.exit(1)
 	s.listen(1)
@@ -195,31 +169,17 @@ def main():
 				data = conn.recv(CHUNK)
 				if not data: break
 				packets += data
-				print(packets)
+				while len(packets) > 0:
+					write_bytes(extract_bytes(BYTES))
+					time.sleep(1/RATE)
 				try:
 					message = data.decode('UTF-8').split('\r')[0]
 				except:
 					pass
-				
 				if message == "exit":
 					debug("Closing connection...")
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
 
-	# debug("Sniffing packets...")
-
-	# while True:
-	# 	#give the processor a rest
-	# 	time.sleep(1/RATE)
-	# 	read_sockets(s, packets)
-	# 	write_bytes(extract_bytes(BYTES))
-	# 	read_sockets(s, packets)
-
 main()
-
-#----------------------------------
-
-
-
-
