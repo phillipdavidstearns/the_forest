@@ -180,8 +180,7 @@ def main():
 	global s
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
-	while True:
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# s.setblocking(SOCKET_BLOCKING)
 		try:
 			s.bind((HOST, TCP_PORT))
@@ -190,6 +189,8 @@ def main():
 			s.close()
 			sys.exit(1)
 		s.listen(1)
+
+	while True:
 		conn, addr = s.accept()
 		with conn:
 			print('Connected from', addr)
@@ -206,8 +207,6 @@ def main():
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
-		s.shutdown(socket.SHUT_RDWR)
-		s.close()
 
 	# debug("Sniffing packets...")
 
