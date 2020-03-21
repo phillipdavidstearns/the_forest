@@ -203,6 +203,7 @@ def main():
 					print("Closing connection...")
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
+					break
 
 	# debug("Sniffing packets...")
 
