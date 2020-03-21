@@ -195,12 +195,12 @@ def main():
 			print("Could not bind socket")
 		s.listen(1)
 		conn, addr = s.accept()
-	    with conn:
-	        print('Connected by', addr)
-	        while True:
-	            data = conn.recv(CHUNK)
-	            if not data: break
-	            print(data)
+		with conn:
+		print('Connected by', addr)
+			while True:
+				data = conn.recv(CHUNK)
+				if not data: break
+				print(data)
 
 	# debug("Sniffing packets...")
 
