@@ -181,7 +181,7 @@ def main():
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	while True:
-		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# s.setblocking(SOCKET_BLOCKING)
 			try:
 				s.bind((HOST, TCP_PORT))
@@ -202,7 +202,6 @@ def main():
 					if message == "exit":
 						print("Closing connection...")
 						#s.shutdown(socket.SHUT_RDWR)
-						return
 				s.close()
 
 	# debug("Sniffing packets...")
