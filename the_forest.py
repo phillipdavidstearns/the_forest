@@ -174,6 +174,7 @@ def main():
 	signal(SIGTERM, SIGTERM_handler)
 	startupIO()
 	global s
+	global packets
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -189,17 +190,19 @@ def main():
 	while True:
 		conn, addr = s.accept()
 		with conn:
-			print('Connected from', addr)
+			debug('Connected from', addr)
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
+				packets += data
+				print(packets)
 				try:
 					message = data.decode('UTF-8').split('\r')[0]
 				except:
 					pass
-				print(message)
+				
 				if message == "exit":
-					print("Closing connection...")
+					debug("Closing connection...")
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
