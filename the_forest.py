@@ -34,10 +34,9 @@ def extract_bytes(packets, qty):
 	for i in range(qty):
 		try:
 			_byte = packets[i]
-			if PRINT: print(chr(_byte),end='')
 		except:
 			_byte = 0
-		chunk.append(_byte)
+		chunk += _byte
 	packets = packets[qty:]
 	return packets, chunk
 
@@ -179,8 +178,8 @@ def main():
 				packets += data
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
-					print(packets)
 					print(chunk)
+					print(packets)
 					IO.update(write_bytes(chunk))
 					time.sleep(1/RATE)
 				try:
