@@ -131,8 +131,8 @@ def write_bytes(data):
 	for b in data:
 		for i in range(8):
 			channelStates.append(b >> i & 1)
-			debug(str(channelStates[i]),end='')
-	debug("")
+	# 		print(str(channelStates[i]),end='')
+	# print("")
 	IO.update(channelStates)
 #------------------------------------------------------------------------
 #
