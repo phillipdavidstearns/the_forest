@@ -191,13 +191,13 @@ def main():
 
 	# debug("Sniffing packets...")
 
-	# while True:
+	while True:
 	# 	#give the processor a rest
-	# 	time.sleep(1/RATE)
+		time.sleep(1/RATE)
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
-	read_sockets(s, packets)
-	print(packets)
+		read_sockets(s, packets)
+		print(packets)
 
 main()
 
