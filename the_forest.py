@@ -187,6 +187,8 @@ def main():
 			s.bind((HOST, TCP_PORT))
 		except:
 			print("Could not bind socket")
+			s.close()
+			sys.exit(1)
 		s.listen(1)
 		conn, addr = s.accept()
 		with conn:
@@ -204,6 +206,8 @@ def main():
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
+		s.shutdown(socket.SHUT_RDWR)
+		s.close()
 
 	# debug("Sniffing packets...")
 
