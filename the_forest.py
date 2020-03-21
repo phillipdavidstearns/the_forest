@@ -57,6 +57,7 @@ CHUNK = args.chunk_size
 RATE = args.frame_rate
 BYTES = args.frame_size
 verbose=args.verbose
+TIMEOUT=10
 
 TCP_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
 TCP_PORT = 31337
@@ -68,6 +69,7 @@ try:
 	s.bind((TCP_IP, TCP_PORT))
 except:
 	print("Could not bind socket")
+s.listen(1)
 
 #------------------------------------------------------------------------
 #	verbose or debug mode
