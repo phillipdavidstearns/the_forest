@@ -107,6 +107,7 @@ def read_sockets(socket, packets):
 				data = s.recvfrom(65536)
 				if data:
 					packets += data
+					print(packets)
 			except:
 				pass
 	else:
@@ -199,7 +200,6 @@ def main():
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
 		read_sockets(s, packets)
-		print(packets)
 
 main()
 
