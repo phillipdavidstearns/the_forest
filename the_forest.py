@@ -19,10 +19,24 @@ from signal import *
 import socket
 import time
 import select
+import CD4094 as IO
 
 if os.getuid() != 0:
 	print("Must be run as root.")
 	sys.exit(1)
+
+channels = 32 # number of output channels
+
+# Pin assignments
+
+# outputs
+strobe = 17 # latch strobe GPIO pin
+data = 27 # data GPIO pin
+clock = 22 # clock GPIO pin
+enable = 23 # IOister enable GPIO pin
+
+# make composite lists to pass along to IO
+pins = [ strobe, data, clock, enable ]
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
@@ -32,6 +46,7 @@ ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help
 ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
 ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
 ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
+parser.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 args = ap.parse_args()
 
 packets = []
@@ -40,6 +55,10 @@ IFACE = args.interface
 CHUNK = args.chunk_size
 RATE = args.frame_rate
 BYTES = args.frame_size
+verbose=args.verbose
+
+if verbose:
+	print("Verbose mode. Displaying debug messeges")
 
 if args.timeout > 0.0:
 	TIMEOUT = args.timeout
@@ -83,12 +102,10 @@ def read_sockets(socket, packets):
 			except:
 				pass
 
-def extract_frames(packets, data):
-	print(data)
-	print(packets)
+def extract_bytes(packets, qty):
 	chunk = []
 	# assemble bytes into chunk
-	for i in range(data):
+	for i in range(qty):
 		try:
 			_byte = packets[i]
 			if PRINT: print(chr(_byte),end='')
@@ -96,17 +113,17 @@ def extract_frames(packets, data):
 			print("trippin...")
 			_byte = 0
 		chunk.append(_byte)
-	print(chunk)
-	packets = packets[data:]
+	packets = packets[qty:]
 	return chunk
 
-def write_packets(packets):
-	print(packets)
-	for p in packets:
+def write_bytes(data):
+	channelStates=[]
+	for b in data:
 		for i in range(8):
-			print(str(p>>8&1),end='')
+			channelStates.append(b >> i & 1)
+			print(str(channelStates[i]),end='')
 	print("")
-	return
+	IO.update(channelStates)
 
 def shutdown(socket):
 	# bring down the pyaudio stream
@@ -115,8 +132,22 @@ def shutdown(socket):
 		socket.close()
 	except:
 		print("Error closing socket.")
+	print('Shutting down GPIO...')
+	try:
+		shutdownIO()
+	except:
+		print("Error shutting down GPIO.")
 	print('Peace out!')
 	sys.exit(0)
+
+#------------------------------------------------------------------------
+#	verbose or debug mode
+
+def debug(message):
+	if verbose:
+		print(message)
+#------------------------------------------------------------------------
+#	Signal Interrupt/Terminate Handlers
 
 # catch control+c
 def SIGINT_handler(sig, frame):
@@ -128,10 +159,24 @@ def SIGTERM_handler(sig, frame):
 	print('\nInterrupt code: ' +str(sig) + 'received!')
 	shutdown(s)
 
+#------------------------------------------------------------------------
+# main
+
+def startupIO():
+	IO.init(pins, channels)
+	IO.clear()
+	IO.enable()
+
+def shutdownIO():
+	IO.disable()
+	IO.clear()
+	IO.cleanup()
+
 def main():
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
+	startupIO()
 
 	print("Sniffing packets...")
 
