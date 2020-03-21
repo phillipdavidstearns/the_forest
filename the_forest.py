@@ -190,7 +190,7 @@ def main():
 	while True:
 		conn, addr = s.accept()
 		with conn:
-			debug('Connected from', addr)
+			debug('Connected from' + str(addr))
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
