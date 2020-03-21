@@ -64,6 +64,7 @@ TCP_IP = LOCAL_IP
 HOST = ''
 TCP_PORT = 31337
 BUFFER_SIZE = 1024
+s = object()
 
 #------------------------------------------------------------------------
 #	verbose or debug mode
@@ -139,9 +140,11 @@ def write_bytes(data):
 #------------------------------------------------------------------------
 #
 
-def shutdown(sig):
+def shutdown(socket, sig):
 	debug("\nInterrupt code: " + str(sig) + " received!")
 	shutdownIO()
+	socket.shutdown()
+	socket.close()
 	sys.exit(0)
 
 #------------------------------------------------------------------------
@@ -149,11 +152,11 @@ def shutdown(sig):
 
 # catch control+c
 def SIGINT_handler(sig, frame):
-	shutdown(sig)
+	shutdown(s, sig)
 
 # catch termination signals from the system
 def SIGTERM_handler(sig, frame):
-	shutdown(sig)
+	shutdown(s, sig)
 
 #------------------------------------------------------------------------
 # main
@@ -173,7 +176,8 @@ def main():
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
-	# startupIO()
+	startupIO()
+	global s
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	while True:
@@ -194,6 +198,7 @@ def main():
 					print(message)
 					if message == "exit":
 						print("Closing connection...")
+						s.shutdown()
 						s.close()
 
 	# debug("Sniffing packets...")
