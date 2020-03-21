@@ -109,8 +109,8 @@ def shutdownIO():
 def main():
 
 	if os.getuid() != 0:
-	print("Must be run as root.")
-	sys.exit(1)
+		print("Must be run as root.")
+		sys.exit(1)
 
 	ap = argparse.ArgumentParser()
 	# ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
