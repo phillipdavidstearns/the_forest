@@ -141,11 +141,10 @@ def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 	# interrupt and terminate signal handling
-	signal(s, SIGINT, SIGINT_handler)
-	signal(s, SIGTERM, SIGTERM_handler)
+	signal(SIGINT, SIGINT_handler)
+	signal(SIGTERM, SIGTERM_handler)
 
 	packets = []
-
 
 	startupIO()
 	channels = 32 # number of output channels
