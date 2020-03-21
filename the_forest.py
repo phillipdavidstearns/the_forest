@@ -83,6 +83,16 @@ except:
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
 
+#------------------------------------------------------------------------
+#	verbose or debug mode
+
+def debug(message):
+	if verbose:
+		print(message)
+
+#------------------------------------------------------------------------
+#
+
 def read_sockets(socket, packets):
 	if SOCKET_BLOCKING:
 		readable,_,_ = select.select(socket, [], [], TIMEOUT)
@@ -124,6 +134,8 @@ def write_bytes(data):
 			debug(str(channelStates[i]),end='')
 	debug("")
 	IO.update(channelStates)
+#------------------------------------------------------------------------
+#
 
 def shutdown(socket):
 	# bring down the pyaudio stream
@@ -139,13 +151,6 @@ def shutdown(socket):
 		debug("Error shutting down GPIO.")
 	debug('Peace out!')
 	sys.exit(0)
-
-#------------------------------------------------------------------------
-#	verbose or debug mode
-
-def debug(message):
-	if verbose:
-		print(message)
 
 #------------------------------------------------------------------------
 #	Signal Interrupt/Terminate Handlers
