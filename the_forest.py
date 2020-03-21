@@ -22,6 +22,9 @@ import time
 import select
 import CD4094 as IO
 
+# object for our socket
+s = object()
+
 #------------------------------------------------------------------------
 #
 
@@ -60,12 +63,12 @@ def shutdown(socket, sig):
 #	Signal Interrupt/Terminate Handlers
 
 # catch control+c
-def SIGINT_handler(socket, sig, frame):
-	shutdown(socket, sig)
+def SIGINT_handler(sig, frame):
+	shutdown(s, sig)
 
 # catch termination signals from the system
 def SIGTERM_handler(socket, sig, frame):
-	shutdown(socket, sig)
+	shutdown(s, sig)
 
 #------------------------------------------------------------------------
 # IO up/down
@@ -109,7 +112,7 @@ def main():
 	TIMEOUT=10 
 	HOST = ''
 	PORT = 31337
-	
+
 	#------------------------------------------------------------------------
 	#	verbose or debug mode
 
@@ -134,13 +137,17 @@ def main():
 	debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 	# initalize TCP socket
+	global s
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 	# interrupt and terminate signal handling
 	signal(s, SIGINT, SIGINT_handler)
 	signal(s, SIGTERM, SIGTERM_handler)
-	packets = []
-	startupIO()
 
+	packets = []
+
+
+	startupIO()
 	channels = 32 # number of output channels
 
 	# Pin assignments
@@ -149,12 +156,10 @@ def main():
 	data = 27 # data GPIO pin
 	clock = 22 # clock GPIO pin
 	enable = 23 # IOister enable GPIO pin
-
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
 
 	# from example at https://docs.python.org/3.7/library/socket.html#example
-	
 	try:
 		s.bind((HOST, PORT))
 	except:
