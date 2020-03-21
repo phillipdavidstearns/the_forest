@@ -58,7 +58,7 @@ BYTES = args.frame_size
 verbose=args.verbose
 
 if verbose:
-	print("Verbose mode. Displaying debug messeges")
+	debug("Verbose mode. Displaying debug messeges")
 
 if args.timeout > 0.0:
 	TIMEOUT = args.timeout
@@ -69,17 +69,17 @@ PRINT = args.print_packet
 
 # sanity check to confirm argument parsing
 
-print("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
-print("INTERFACE: " + str(IFACE))
-print("CHUNK SIZE: " + str(CHUNK))
-print("FRAME RATE: " + str(RATE))
-print("SOCKET TIMEOUT: " + str(TIMEOUT))
+debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
+debug("INTERFACE: " + str(IFACE))
+debug("CHUNK SIZE: " + str(CHUNK))
+debug("FRAME RATE: " + str(RATE))
+debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(0x0003))
 try:
 	s.bind((IFACE, 0))
 except:
-	print("Failed to bind to interface: " + IFACE)
+	debug("Failed to bind to interface: " + IFACE)
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
 
@@ -132,7 +132,7 @@ def shutdown(socket):
 		socket.close()
 	except:
 		debug("Error closing socket.")
-	print('Shutting down GPIO...')
+	debug('Shutting down GPIO...')
 	try:
 		shutdownIO()
 	except:
@@ -180,7 +180,7 @@ def main():
 	signal(SIGTERM, SIGTERM_handler)
 	startupIO()
 
-	print("Sniffing packets...")
+	debug("Sniffing packets...")
 
 	while True:
 		#give the processor a rest
