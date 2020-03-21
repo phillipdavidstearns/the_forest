@@ -60,7 +60,7 @@ verbose=args.verbose
 TIMEOUT=10
 
 LOCAL_IP = subprocess.check_output(["hostname","-I"]).decode('UTF-8').split(' ')[0]
-TCP_IP = '0,0,0,0'
+TCP_IP = LOCAL_IP
 TCP_PORT = 31337
 BUFFER_SIZE = 1024
 
