@@ -102,8 +102,7 @@ def read_sockets(socket, packets):
 			except:
 				pass
 
-def extract_bytes(qty):
-	global packets
+def extract_bytes(packets, qty):
 	chunk = []
 	# assemble bytes into chunk
 	for i in range(qty):
@@ -174,6 +173,9 @@ def shutdownIO():
 	IO.cleanup()
 
 def main():
+
+	global packets
+	
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
@@ -185,7 +187,7 @@ def main():
 		#give the processor a rest
 		time.sleep(1/CHUNK)
 		read_sockets(s, packets)
-		write_bytes(extract_bytes(BYTES))
+		write_bytes(extract_bytes(packets, BYTES))
 
 main()
 
