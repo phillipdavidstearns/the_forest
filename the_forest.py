@@ -46,7 +46,7 @@ ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help
 ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
 ap.add_argument("-p", "--print-packet", action='store_true', default=False, required=False, help="print packet to console")
 ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
-parser.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
+ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 args = ap.parse_args()
 
 packets = []
