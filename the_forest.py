@@ -202,7 +202,7 @@ def main():
 				if message == "exit":
 					print("Closing connection...")
 					#s.shutdown(socket.SHUT_RDWR)
-			s.close()
+		s.close()
 
 	# debug("Sniffing packets...")
 
