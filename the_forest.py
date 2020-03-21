@@ -198,7 +198,7 @@ def main():
 					print(message)
 					if message == "exit":
 						print("Closing connection...")
-						s.shutdown(socket.SHUT_RDWD)
+						s.shutdown(socket.SHUT_RDWR)
 						s.close()
 
 	# debug("Sniffing packets...")
