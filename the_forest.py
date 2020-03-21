@@ -61,7 +61,7 @@ TIMEOUT=10
 
 HOST = ''
 PORT = 31337
-
+s=object()
 #------------------------------------------------------------------------
 #	verbose or debug mode
 
@@ -173,6 +173,7 @@ def main():
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
 	startupIO()
+	global s
 
 # from example at https://docs.python.org/3.7/library/socket.html#example
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
