@@ -194,7 +194,10 @@ def main():
 				while True:
 					data = conn.recv(CHUNK)
 					if not data: break
-					message = data.decode('UTF-8').split('\r')[0]
+					try:
+						message = data.decode('UTF-8').split('\r')[0]
+					except:
+						pass
 					print(message)
 					if message == "exit":
 						print("Closing connection...")
