@@ -22,44 +22,6 @@ import time
 import select
 import CD4094 as IO
 
-if os.getuid() != 0:
-	print("Must be run as root.")
-	sys.exit(1)
-
-channels = 32 # number of output channels
-
-# Pin assignments
-
-# outputs
-strobe = 17 # latch strobe GPIO pin
-data = 27 # data GPIO pin
-clock = 22 # clock GPIO pin
-enable = 23 # IOister enable GPIO pin
-
-# make composite lists to pass along to IO
-pins = [ strobe, data, clock, enable ]
-
-ap = argparse.ArgumentParser()
-# ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
-ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
-ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
-ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
-ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
-ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
-ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
-args = ap.parse_args()
-
-# SOCKET_BLOCKING = args.socket_blocking
-IFACE = args.interface
-CHUNK = args.chunk_size
-RATE = args.frame_rate
-BYTES = args.frame_size
-verbose=args.verbose
-TIMEOUT=10
-
-HOST = ''
-PORT = 31337
-s=object()
 #------------------------------------------------------------------------
 #	verbose or debug mode
 
@@ -107,6 +69,7 @@ def write_bytes(data):
 			print(str(channelStates[i]),end='')
 	print("")
 	return channelStates
+
 #------------------------------------------------------------------------
 #
 
@@ -120,12 +83,12 @@ def shutdown(socket, sig):
 #	Signal Interrupt/Terminate Handlers
 
 # catch control+c
-def SIGINT_handler(sig, frame):
-	shutdown(s, sig)
+def SIGINT_handler(socket, sig, frame):
+	shutdown(socket, sig)
 
 # catch termination signals from the system
-def SIGTERM_handler(sig, frame):
-	shutdown(s, sig)
+def SIGTERM_handler(socket, sig, frame):
+	shutdown(socket, sig)
 
 #------------------------------------------------------------------------
 # IO up/down
@@ -145,15 +108,53 @@ def shutdownIO():
 
 def main():
 
+	if os.getuid() != 0:
+	print("Must be run as root.")
+	sys.exit(1)
+
+	ap = argparse.ArgumentParser()
+	# ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
+	ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
+	ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
+	ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
+	ap.add_argument("-t", "--timeout", type=float, default=0.0, required=False, help="socket timeout in seconds")
+	ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
+	ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
+	args = ap.parse_args()
+
+	# SOCKET_BLOCKING = args.socket_blocking
+	IFACE = args.interface
+	CHUNK = args.chunk_size
+	RATE = args.frame_rate
+	BYTES = args.frame_size
+	verbose=args.verbose
+	# future: make arguments for these
+	TIMEOUT=10 
+	HOST = ''
+	PORT = 31337
+
+	# initalize TCP socket
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	# interrupt and terminate signal handling
-	signal(SIGINT, SIGINT_handler)
-	signal(SIGTERM, SIGTERM_handler)
+	signal(s, SIGINT, SIGINT_handler)
+	signal(s, SIGTERM, SIGTERM_handler)
+	packets = []
 	startupIO()
 
-	packets = []
+	channels = 32 # number of output channels
 
-# from example at https://docs.python.org/3.7/library/socket.html#example
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	# Pin assignments
+	# outputs
+	strobe = 17 # latch strobe GPIO pin
+	data = 27 # data GPIO pin
+	clock = 22 # clock GPIO pin
+	enable = 23 # IOister enable GPIO pin
+
+	# make composite lists to pass along to IO
+	pins = [ strobe, data, clock, enable ]
+
+	# from example at https://docs.python.org/3.7/library/socket.html#example
+	
 	try:
 		s.bind((HOST, PORT))
 	except:
@@ -172,6 +173,7 @@ def main():
 				packets += data
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
+					print(packets)
 					IO.update(write_bytes(chunk))
 					time.sleep(1/RATE)
 				try:
