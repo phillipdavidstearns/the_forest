@@ -57,6 +57,13 @@ RATE = args.frame_rate
 BYTES = args.frame_size
 verbose=args.verbose
 
+#------------------------------------------------------------------------
+#	verbose or debug mode
+
+def debug(message):
+	if verbose:
+		print(message)
+
 if verbose:
 	debug("Verbose mode. Displaying debug messeges")
 
@@ -82,13 +89,6 @@ except:
 	debug("Failed to bind to interface: " + IFACE)
 	sys.exit(1)
 s.setblocking(SOCKET_BLOCKING)
-
-#------------------------------------------------------------------------
-#	verbose or debug mode
-
-def debug(message):
-	if verbose:
-		print(message)
 
 #------------------------------------------------------------------------
 #
