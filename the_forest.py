@@ -102,7 +102,8 @@ def read_sockets(socket, packets):
 			except:
 				pass
 
-def extract_bytes(packets, qty):
+def extract_bytes(qty):
+	global packets
 	chunk = []
 	# assemble bytes into chunk
 	for i in range(qty):
@@ -184,7 +185,7 @@ def main():
 		#give the processor a rest
 		time.sleep(1/CHUNK)
 		read_sockets(s, packets)
-		write_bytes(extract_bytes(packets,BYTES))
+		write_bytes(extract_bytes(BYTES))
 
 main()
 
