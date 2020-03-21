@@ -196,11 +196,13 @@ def main():
 		s.listen(1)
 		conn, addr = s.accept()
 		with conn:
-			print('Connected by', addr)
+			print('Connected from', addr)
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
-				print(data)
+				message = data.encode('UTF-8')
+				print(message)
+				if message == "exit": s.close()
 
 	# debug("Sniffing packets...")
 
