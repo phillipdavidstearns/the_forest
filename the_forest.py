@@ -187,6 +187,8 @@ def main():
 	signal(SIGTERM, SIGTERM_handler)
 	# startupIO()
 
+# from example at https://docs.python.org/3.7/library/socket.html#example
+
 	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 # s.setblocking(SOCKET_BLOCKING)
 		try:
@@ -200,7 +202,7 @@ def main():
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
-				message = data.encode('UTF-8')
+				message = data.decode('UTF-8')
 				print(message)
 				if message == "exit": s.close()
 
