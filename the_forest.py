@@ -183,26 +183,26 @@ def main():
 	while True:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		# s.setblocking(SOCKET_BLOCKING)
-			try:
-				s.bind((HOST, TCP_PORT))
-			except:
-				print("Could not bind socket")
-			s.listen(1)
-			conn, addr = s.accept()
-			with conn:
-				print('Connected from', addr)
-				while True:
-					data = conn.recv(CHUNK)
-					if not data: break
-					try:
-						message = data.decode('UTF-8').split('\r')[0]
-					except:
-						pass
-					print(message)
-					if message == "exit":
-						print("Closing connection...")
-						#s.shutdown(socket.SHUT_RDWR)
-				s.close()
+		try:
+			s.bind((HOST, TCP_PORT))
+		except:
+			print("Could not bind socket")
+		s.listen(1)
+		conn, addr = s.accept()
+		with conn:
+			print('Connected from', addr)
+			while True:
+				data = conn.recv(CHUNK)
+				if not data: break
+				try:
+					message = data.decode('UTF-8').split('\r')[0]
+				except:
+					pass
+				print(message)
+				if message == "exit":
+					print("Closing connection...")
+					#s.shutdown(socket.SHUT_RDWR)
+			s.close()
 
 	# debug("Sniffing packets...")
 
