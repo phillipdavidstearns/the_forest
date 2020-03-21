@@ -199,6 +199,7 @@ def main():
 	# 	read_sockets(s, packets)
 	# 	write_bytes(extract_bytes(BYTES))
 		read_sockets(s, packets)
+		print(packets)
 
 main()
 
