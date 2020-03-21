@@ -40,7 +40,7 @@ enable = 23 # IOister enable GPIO pin
 pins = [ strobe, data, clock, enable ]
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
+ap.add_argument("-s", "--socket-blocking", action='store_true', default=True, required=False, help="non-blocking by default")
 ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
 ap.add_argument("-c", "--chunk-size", type=int, default=2048, required=False, help="chunk size in frames") # not sure if I need this
 ap.add_argument("-r", "--frame-rate", type=int, default=30, required=False, help="frames per second")
@@ -63,10 +63,14 @@ TCP_PORT = 31337
 BUFFER_SIZE = 1024
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
+s.setblocking(SOCKET_BLOCKING)
+try:
+	s.bind((TCP_IP, TCP_PORT))
+except:
+	print("Could not bind socket")
 data = s.recv(BUFFER_SIZE)
 s.close()
-print "received data:", data
+print ("received data: " + str(data).decode('UTF-8'))
 sys.exit(0)
 
 #------------------------------------------------------------------------
