@@ -192,7 +192,9 @@ def main():
 					if not data: break
 					message = data.decode('UTF-8').split('\r')[0]
 					print(message)
-					if message == "exit": s.close()
+					if message == "exit":
+						print("Closing connection...")
+						s.close()
 
 	# debug("Sniffing packets...")
 
