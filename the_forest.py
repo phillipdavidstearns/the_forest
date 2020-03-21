@@ -73,7 +73,7 @@ def SIGTERM_handler(sig, frame):
 #------------------------------------------------------------------------
 # IO up/down
 
-def startupIO():
+def startupIO(pins, channels):
 	IO.init(pins, channels)
 	IO.clear()
 	IO.enable()
@@ -92,6 +92,15 @@ def main():
 		print("Must be run as root.")
 		sys.exit(1)
 
+	global s
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+	# interrupt and terminate signal handling
+	signal(SIGINT, SIGINT_handler)
+	signal(SIGTERM, SIGTERM_handler)
+
+	#-------------------------------------------------------------------
+	# argument stuff
 	ap = argparse.ArgumentParser()
 	# ap.add_argument("-s", "--socket-blocking", action='store_true', default=False, required=False, help="non-blocking by default")
 	ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
@@ -137,16 +146,18 @@ def main():
 	debug("SOCKET TIMEOUT: " + str(TIMEOUT))
 
 	# initalize TCP socket
-	global s
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-	# interrupt and terminate signal handling
-	signal(SIGINT, SIGINT_handler)
-	signal(SIGTERM, SIGTERM_handler)
+	# from example at https://docs.python.org/3.7/library/socket.html#example
+	try:
+		s.bind((HOST, PORT))
+	except:
+		debug("Could not bind socket")
+		s.close()
+		sys.exit(1)
+	s.listen(1)
 
 	packets = []
 
-	startupIO()
 	channels = 32 # number of output channels
 
 	# Pin assignments
@@ -157,15 +168,7 @@ def main():
 	enable = 23 # IOister enable GPIO pin
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
-
-	# from example at https://docs.python.org/3.7/library/socket.html#example
-	try:
-		s.bind((HOST, PORT))
-	except:
-		debug("Could not bind socket")
-		s.close()
-		sys.exit(1)
-	s.listen(1)
+	startupIO(pins, channels)
 
 	while True:
 		conn, addr = s.accept()
