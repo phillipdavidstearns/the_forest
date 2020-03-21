@@ -23,13 +23,6 @@ import select
 import CD4094 as IO
 
 #------------------------------------------------------------------------
-#	verbose or debug mode
-
-def debug(message):
-	if verbose:
-		print(message)
-
-#------------------------------------------------------------------------
 #
 
 def extract_bytes(packets, qty):
@@ -116,6 +109,13 @@ def main():
 	TIMEOUT=10 
 	HOST = ''
 	PORT = 31337
+	
+	#------------------------------------------------------------------------
+	#	verbose or debug mode
+
+	def debug(message):
+		if verbose:
+			print(message)
 
 	if verbose:
 		debug("Verbose mode. Displaying debug messeges")
