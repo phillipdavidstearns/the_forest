@@ -175,6 +175,7 @@ def main():
 			debug('Connected from' + str(addr))
 			while True:
 				data = conn.recv(CHUNK)
+				print(data)
 				if not data: break
 				try:
 					message = data.decode('UTF-8').split('\r')[0]
@@ -185,7 +186,7 @@ def main():
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
-				packets += message
+				packets += message.encode()
 				print(packets)
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
