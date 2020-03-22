@@ -46,7 +46,6 @@ def write_bytes(data, channels):
 		b = data[i]
 		for j in range(8):
 			channelStates.append(b >> j & 1)
-	debug(channelStates)
 	return channelStates
 
 #------------------------------------------------------------------------
