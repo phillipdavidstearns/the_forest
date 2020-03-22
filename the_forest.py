@@ -163,7 +163,7 @@ def main():
 				if not data: break
 				try: 
 					for line in data.decode('UTF-8'):
-    					messages += line.rstrip('\r\n')
+						messages += line.rstrip('\r\n')
 				except:
 					pass
 				
