@@ -157,23 +157,23 @@ def main():
 		conn, addr = s.accept()
 		with conn:
 			debug('Connected from' + str(addr))
-			while True:
-				data = conn.recv(CHUNK)
-				if not data: break
-				try:
-					message = data.decode('UTF-8').split('\r')[0]
-				except:
-					pass
-				if message == "close":
-					debug("Closing connection...")
-					conn.shutdown(socket.SHUT_RDWR)
-					conn.close()
-					break
-				packets += message.encode()
-				while len(packets) > 0 and len(packets) >= 4:
-					packets, chunk = extract_bytes(packets, BYTES)
-					IO.update(write_bytes(chunk, channels))
-					# time.sleep(1/RATE)
+			# while True:
+			data = conn.recv(CHUNK)
+			if not data: break
+			try:
+				message = data.decode('UTF-8').split('\r')[0]
+			except:
+				pass
+			if message == "close":
+				debug("Closing connection...")
+				conn.shutdown(socket.SHUT_RDWR)
+				conn.close()
+				break
+			packets += message.encode()
+			# while len(packets) > 0 and len(packets) >= 4:
+			packets, chunk = extract_bytes(packets, BYTES)
+			IO.update(write_bytes(chunk, channels))
+				# time.sleep(1/RATE)
 
 
 if __name__ == '__main__':
