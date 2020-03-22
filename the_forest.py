@@ -159,8 +159,9 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(CHUNK)
+				data = conn.recv(4)
 				print(data)
+				IO.update(data)
 				# if not data: break
 				# try: 
 				# 	for line in data.decode('UTF-8'):
