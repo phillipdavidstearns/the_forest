@@ -45,11 +45,8 @@ def write_bytes(data, channels):
 	channelStates=[]*channels
 	for i in range(len(data)):
 		b = data[i]
-		print(b)
 		for j in range(8):
 			channelStates.append(b >> j & 1)
-	# 		print(str(channelStates[i]),end='')
-	# print("")
 	print(channelStates)
 	return channelStates
 
@@ -194,7 +191,7 @@ def main():
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
 					IO.update(write_bytes(chunk, channels))
-					time.sleep(1/RATE)
+					# time.sleep(1/RATE)
 
 
 if __name__ == '__main__':
