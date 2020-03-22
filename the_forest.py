@@ -94,7 +94,7 @@ def main():
 
 	global s
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+	s.close()
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
@@ -115,7 +115,7 @@ def main():
 	CHUNK = args.chunk_size
 	RATE = args.frame_rate
 	BYTES = args.frame_size
-	VERBOSE=args.verbose
+	VERBOSE = args.verbose
 	HOST = args.lhost_ip
 	PORT = args.lhost_port
 
