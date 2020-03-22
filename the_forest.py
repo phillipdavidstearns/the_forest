@@ -129,11 +129,6 @@ def main():
 	if VERBOSE:
 		debug("Verbose mode. Displaying debug messeges")
 
-	if args.timeout > 0.0:
-		TIMEOUT = args.timeout
-	else:
-		TIMEOUT = 1 / CHUNK
-
 	# sanity check to confirm argument parsing
 
 	# debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
