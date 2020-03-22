@@ -179,7 +179,7 @@ def main():
 				# # while len(packets) > 0 and len(packets) >= 4:
 				chunk = packets[0:4]
 				packets = packets [4:]
-				packets, chunk = extract_bytes(packets, BYTES)
+				# packets, chunk = extract_bytes(packets, BYTES)
 				IO.update(write_bytes(chunk, channels))
 				# 	time.sleep(1/RATE)
 
