@@ -129,14 +129,6 @@ def main():
 	if VERBOSE:
 		debug("Verbose mode. Displaying debug messeges")
 
-	# sanity check to confirm argument parsing
-
-	# debug("SOCKET_BLOCKING: " + str(SOCKET_BLOCKING))
-	debug("INTERFACE: " + str(IFACE))
-	debug("CHUNK SIZE: " + str(CHUNK))
-	debug("FRAME RATE: " + str(RATE))
-	debug("SOCKET TIMEOUT: " + str(TIMEOUT))
-
 	# initalize TCP socket
 
 	# from example at https://docs.python.org/3.7/library/socket.html#example
