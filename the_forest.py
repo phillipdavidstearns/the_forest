@@ -43,10 +43,11 @@ def extract_bytes(packets, qty):
 def write_bytes(data, channels):
 	print(data)
 	channelStates=[]*channels
-	for b in data:
+	for i in len(data):
+		b = data[i]
 		print(b)
-		for i in range(8):
-			channelStates.append(b >> i & 1)
+		for j in range(8):
+			channelStates.append(b >> j & 1)
 			print(str(channelStates[i]),end='')
 	print("")
 	return channelStates
