@@ -44,7 +44,7 @@ def write_bytes(data):
 	channelStates=[]
 	for b in data:
 		for i in range(8):
-			channelStates.append(ord(b) >> i & 1)
+			channelStates.append(b >> i & 1)
 			print(str(channelStates[i]),end='')
 	print("")
 	return channelStates
@@ -53,6 +53,7 @@ def write_bytes(data):
 #
 
 def shutdown(socket, sig):
+	print("")
 	shutdownIO()
 	socket.close()
 	sys.exit(0)
@@ -185,6 +186,7 @@ def main():
 					conn.close()
 					break
 				packets += message
+				print(packets)
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
 					IO.update(write_bytes(chunk))
