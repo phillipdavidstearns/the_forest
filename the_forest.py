@@ -150,7 +150,7 @@ def main():
 	try:
 		s.bind((HOST, PORT))
 	except:
-		debug("Could not bind socket")
+		print("Could not bind socket")
 		s.close()
 		sys.exit(1)
 	s.listen(1)
