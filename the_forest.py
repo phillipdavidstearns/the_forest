@@ -94,7 +94,6 @@ def main():
 
 	global s
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.close()
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
@@ -135,7 +134,7 @@ def main():
 	try:
 		s.bind((HOST, PORT))
 	except:
-		print("Could not bind socket")
+		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
 	s.listen(1)
