@@ -163,12 +163,13 @@ def main():
 				if not data: break
 				try: 
 					for line in data.decode('UTF-8'):
-						messages += line.rstrip('\r\n')
+						message = line.rstrip('\r\n')
+						print(message)
+						messages += message
 				except:
 					pass
 				
 				for message in messages:
-					print(message)
 					if message == "close":
 						debug("Closing connection...")
 						conn.shutdown(socket.SHUT_RDWR)
