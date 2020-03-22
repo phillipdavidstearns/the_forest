@@ -116,8 +116,8 @@ def main():
 	RATE = args.frame_rate
 	BYTES = args.frame_size
 	VERBOSE = args.verbose
-	HOST = args.lhost_ip
-	PORT = args.lhost_port
+	HOST = ''
+	PORT = 31337
 
 	#------------------------------------------------------------------------
 	#	verbose or debug mode
