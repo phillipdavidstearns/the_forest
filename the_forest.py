@@ -29,14 +29,15 @@ s = object()
 #
 
 def extract_bytes(packets, qty):
-	chunk = []
+	chunk = []*qty
 	# assemble bytes into chunk
 	for i in range(qty):
 		try:
+			print("extracting...")
 			_byte = packets[i]
 		except:
 			_byte = 0
-		chunk += _byte
+		chunk.append(_byte)
 	packets = packets[qty:]
 	return packets, chunk
 
