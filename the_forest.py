@@ -33,7 +33,6 @@ def extract_bytes(packets, qty):
 	# assemble bytes into chunk
 	for i in range(qty):
 		try:
-			print("extracting...")
 			_byte = packets[i]
 		except:
 			_byte = 0
@@ -187,7 +186,7 @@ def main():
 					message = data.decode('UTF-8').split('\r')[0]
 				except:
 					pass
-				if message == "exit":
+				if message == "close":
 					debug("Closing connection...")
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
