@@ -55,10 +55,11 @@ def write_bytes(data, channels):
 #------------------------------------------------------------------------
 #
 
-def shutdown(socket, sig):
+def shutdown(s, sig):
 	print("")
 	shutdownIO()
-	socket.close()
+	s.shutdown(socket.SHUT_RDWR)
+	s.close()
 	sys.exit(0)
 
 #------------------------------------------------------------------------
