@@ -44,7 +44,7 @@ def write_bytes(data):
 	channelStates=[]
 	for b in data:
 		for i in range(8):
-			channelStates.append(b >> i & 1)
+			channelStates.append(ord(b) >> i & 1)
 			print(str(channelStates[i]),end='')
 	print("")
 	return channelStates
@@ -175,13 +175,6 @@ def main():
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
-				packets += data
-				while len(packets) > 0:
-					packets, chunk = extract_bytes(packets, BYTES)
-					print(chunk)
-					print(packets)
-					IO.update(write_bytes(chunk))
-					time.sleep(1/RATE)
 				try:
 					message = data.decode('UTF-8').split('\r')[0]
 				except:
@@ -191,6 +184,11 @@ def main():
 					conn.shutdown(socket.SHUT_RDWR)
 					conn.close()
 					break
+				packets += message
+				while len(packets) > 0:
+					packets, chunk = extract_bytes(packets, BYTES)
+					IO.update(write_bytes(chunk))
+					time.sleep(1/RATE)
 
 
 if __name__ == '__main__':
