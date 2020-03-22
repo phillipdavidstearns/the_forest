@@ -191,7 +191,7 @@ def main():
 				while len(packets) > 0:
 					packets, chunk = extract_bytes(packets, BYTES)
 					print(chunk)
-					# IO.update(write_bytes(chunk))
+					IO.update(write_bytes(chunk))
 					time.sleep(1/RATE)
 
 
