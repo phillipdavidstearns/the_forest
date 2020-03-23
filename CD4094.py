@@ -17,6 +17,41 @@ CHANNELS=-1
 # pins[1] are basic input pins
 # pins[2] are hardware PWM values: [ pin, freq, brightness ]
 
+def enable():
+	GPIO.output(ENABLE, 1)
+
+def disable():
+	GPIO.output(ENABLE, 0)
+
+def clear():
+	GPIO.output(DATA, 0)
+	for c in range(CHANNELS):
+		GPIO.output(CLOCK, 0)
+		GPIO.output(CLOCK, 1)
+	GPIO.output(CLOCK, 0)
+	GPIO.output(STROBE, 1)
+	GPIO.output(STROBE, 0)
+
+def start():
+	clear()
+	enable()
+
+def stop():
+	disable()
+	clear()
+	GPIO.cleanup()
+
+# takes a list of boolean values and outputs them
+def update(values):
+	for c in range(CHANNELS):
+		GPIO.output(CLOCK, 0)
+		GPIO.output(DATA, values[CHANNELS - c - 1])
+		GPIO.output(CLOCK, 1)
+	GPIO.output(CLOCK, 0)
+	GPIO.output(STROBE, 1)
+	GPIO.output(STROBE, 0)
+	GPIO.output(DATA, 0)
+
 def init(pins, channels):
 
 	GPIO.setwarnings(False)
@@ -47,39 +82,4 @@ def init(pins, channels):
 	for pin in pins: 
 		GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
 
-	self.start()
-
-def start():
-	self.clear()
-	self.enable()
-
-def stop():
-	self.disable()
-	self.clear()
-	GPIO.cleanup()
-
-def enable():
-	GPIO.output(ENABLE, 1)
-
-def disable():
-	GPIO.output(ENABLE, 0)
-
-def clear():
-	GPIO.output(DATA, 0)
-	for c in range(CHANNELS):
-		GPIO.output(CLOCK, 0)
-		GPIO.output(CLOCK, 1)
-	GPIO.output(CLOCK, 0)
-	GPIO.output(STROBE, 1)
-	GPIO.output(STROBE, 0)
-
-# takes a list of boolean values and outputs them
-def update(values):
-	for c in range(CHANNELS):
-		GPIO.output(CLOCK, 0)
-		GPIO.output(DATA, values[CHANNELS - c - 1])
-		GPIO.output(CLOCK, 1)
-	GPIO.output(CLOCK, 0)
-	GPIO.output(STROBE, 1)
-	GPIO.output(STROBE, 0)
-	GPIO.output(DATA, 0)
+	start()
