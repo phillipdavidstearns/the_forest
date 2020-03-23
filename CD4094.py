@@ -47,7 +47,15 @@ def init(pins, channels):
 	for pin in pins: 
 		GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
 
-def cleanup():
+	self.start()
+
+def start():
+	self.clear()
+	self.enable()
+
+def stop():
+	self.disable()
+	self.clear()
 	GPIO.cleanup()
 
 def enable():
