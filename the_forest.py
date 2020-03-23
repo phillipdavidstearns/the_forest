@@ -54,7 +54,7 @@ def write_bytes(data, channels):
 
 def shutdown(s, sig):
 	print("")
-	shutdownIO()
+	IO.stop()
 	s.shutdown(socket.SHUT_RDWR)
 	s.close()
 	sys.exit(0)
@@ -73,15 +73,17 @@ def SIGTERM_handler(sig, frame):
 #------------------------------------------------------------------------
 # IO up/down
 
-def startupIO(pins, channels):
-	IO.init(pins, channels)
-	IO.clear()
-	IO.enable()
+# replaced by IO.init()
+# def startupIO(pins, channels):
+# 	IO.init(pins, channels)
+# 	IO.clear()
+# 	IO.enable()
 
-def shutdownIO():
-	IO.disable()
-	IO.clear()
-	IO.cleanup()
+# replaced by IO.stop()
+# def shutdownIO():
+# 	IO.disable()
+# 	IO.clear()
+# 	IO.cleanup()
 
 #------------------------------------------------------------------------
 # main
@@ -151,7 +153,7 @@ def main():
 	enable = 23 # IOister enable GPIO pin
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
-	startupIO(pins, channels)
+	IO.init(pins, channels)
 
 	while True:
 		conn, addr = s.accept()
