@@ -58,18 +58,22 @@ def shutdown(s, sig):
 	print("")
 	IO.stop()
 	try:
+		print("Sutting down connection")
 		conn.shutdown(socket.SHUT_RDWR)
 	except:
 		pass
 	try:
+		print("Closing connection")
 		conn.close()
 	except:
 		pass
 	try:
+		print("Sutting down socket")
 		s.shutdown(socket.SHUT_RDWR)
 	except:
 		pass
 	try:
+		print("Closing socket")
 		s.close()
 	except:
 		pass
