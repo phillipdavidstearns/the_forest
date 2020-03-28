@@ -150,6 +150,7 @@ def main():
 			while True:
 				data = conn.recv(2048)
 				if not data: break
+				print(data)
 				packets+=data
 				chunk = packets[:4]
 				while len(chunk) < 4:
