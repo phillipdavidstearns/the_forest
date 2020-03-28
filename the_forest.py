@@ -72,21 +72,6 @@ def SIGTERM_handler(sig, frame):
 	shutdown(s, sig)
 
 #------------------------------------------------------------------------
-# IO up/down
-
-# replaced by IO.init()
-# def startupIO(pins, channels):
-# 	IO.init(pins, channels)
-# 	IO.clear()
-# 	IO.enable()
-
-# replaced by IO.stop()
-# def shutdownIO():
-# 	IO.disable()
-# 	IO.clear()
-# 	IO.cleanup()
-
-#------------------------------------------------------------------------
 # main
 
 def main():
@@ -185,7 +170,6 @@ def main():
 				chunk = packets[:4]
 				while len(chunk) < 4:
 					chunk.append(0)
-				print(chunk)
 				packets = packets [4:]
 				lights = write_bytes(chunk, channels)
 				IO.update(lights)
