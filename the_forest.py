@@ -143,9 +143,6 @@ def main():
 	pins = [ strobe, data, clock, enable ]
 	IO.init(pins, channels)
 
-	conn=object()
-	addr=""
-
 	while True:
 		debug("Entering Loop")
 		try:
