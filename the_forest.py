@@ -42,13 +42,11 @@ def extract_bytes(packets, qty):
 	return packets, chunk
 
 def write_bytes(data, channels):
-	print(len(data))
 	channelStates=[]
 	for i in range(len(data)):
 		b = data[i]
 		for j in range(8):
 			channelStates.append(b >> j & 1)
-	print(channelStates)
 	return channelStates
 
 #------------------------------------------------------------------------
@@ -171,8 +169,8 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = bytes(conn.recv(4096))
-				# if not data: break
+				data = conn.recv(4096)
+				if not data: break
 				# try: 
 				# 	for line in data.decode('UTF-8'):
 				# 		message = line.rstrip('\r\n')
@@ -196,9 +194,8 @@ def main():
 				while len(chunk) < 4:
 					chunk.append(0)
 				packets = packets [4:]
-				lights = write_bytes(chunk, channels)
-				IO.update(lights)
-				# 	time.sleep(1/RATE)
+				IO.update(write_bytes(chunk, channels))
+				time.sleep(1/RATE)
 
 
 if __name__ == '__main__':
