@@ -185,7 +185,7 @@ def main():
 				packets = packets [4:]
 				lights = write_bytes(chunk, channels)
 				print(lights)
-				IO.update()
+				IO.update(lights)
 				# 	time.sleep(1/RATE)
 
 

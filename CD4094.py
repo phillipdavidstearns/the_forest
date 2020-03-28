@@ -43,6 +43,8 @@ def stop():
 
 # takes a list of boolean values and outputs them
 def update(values):
+	print(len(values))
+	print(CHANNELS)
 	for c in range(CHANNELS):
 		GPIO.output(CLOCK, 0)
 		GPIO.output(DATA, values[CHANNELS - c - 1])
