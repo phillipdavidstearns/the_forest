@@ -141,7 +141,7 @@ def main():
 		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
-	s.socket_blocking(SOCKET_BLOCKING)
+	s.blocking(SOCKET_BLOCKING)
 	s.listen(1)
 
 	packets = []
