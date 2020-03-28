@@ -159,7 +159,10 @@ def main():
 	IO.init(pins, channels)
 
 	while True:
-		conn, addr = s.accept()
+		try:
+			conn, addr = s.accept()
+		except:
+			pass
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
@@ -192,7 +195,7 @@ def main():
 				packets = packets [4:]
 				IO.update(write_bytes(chunk, channels))
 				time.sleep(1/RATE)
-
+		time.sleep(1/2048.0)
 
 if __name__ == '__main__':
 	main()
