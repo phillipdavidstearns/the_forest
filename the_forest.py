@@ -148,7 +148,7 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(2048)
+				data = conn.recv(4)
 				if not data: break
 				packets+=data
 				chunk = packets[:4]
@@ -156,7 +156,7 @@ def main():
 					chunk.append(0)
 				packets = packets [4:]
 				IO.update(write_bytes(chunk, channels))
-				time.sleep(1/RATE)
+				# time.sleep(1/RATE)
 
 if __name__ == '__main__':
 	main()
