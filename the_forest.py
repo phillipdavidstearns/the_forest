@@ -156,11 +156,12 @@ def main():
 						pass
 					if data:
 						packets.append(data)
-					debug(packets)
-					chunk = packets[0:4]
-					packets = packets [4:]
-					IO.update(write_bytes(chunk, channels))
-					time.sleep(1/RATE)
+					while len(packets) > 0:
+						debug(packets)
+						chunk = packets[0:4]
+						packets = packets [4:]
+						IO.update(write_bytes(chunk, channels))
+						time.sleep(1/RATE)
 		except:
 			pass
 		time.sleep(1/2048.0)
