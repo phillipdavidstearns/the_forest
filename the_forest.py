@@ -71,6 +71,21 @@ def SIGTERM_handler(sig, frame):
 	shutdown(s, sig)
 
 #------------------------------------------------------------------------
+# IO up/down
+
+# replaced by IO.init()
+# def startupIO(pins, channels):
+# 	IO.init(pins, channels)
+# 	IO.clear()
+# 	IO.enable()
+
+# replaced by IO.stop()
+# def shutdownIO():
+# 	IO.disable()
+# 	IO.clear()
+# 	IO.cleanup()
+
+#------------------------------------------------------------------------
 # main
 
 def main():
@@ -94,7 +109,6 @@ def main():
 	ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
 	ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
 	ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
-	ap.add_argument('-s', "--socket-blocking", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	args = ap.parse_args()
 
@@ -103,7 +117,6 @@ def main():
 	RATE = args.frame_rate
 	BYTES = args.frame_size
 	VERBOSE = args.verbose
-	SOCKET_BLOCKING = args.socket_blocking
 	HOST = ''
 	PORT = 31337
 
@@ -126,7 +139,6 @@ def main():
 		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
-	s.setblocking(SOCKET_BLOCKING)
 	s.listen(1)
 
 	packets = []
@@ -144,25 +156,38 @@ def main():
 	IO.init(pins, channels)
 
 	while True:
-		try:
-			conn, addr = s.accept()
-			debug([conn, addr])
-			with conn:
-				debug('Connected from' + str(addr))
-				while True:
-					data = conn.recv(65536)
-					if data:
-						packets.append(data)
-					while len(packets) > 0:
-						debug(packets)
-						chunk = packets[0:4]
-						packets = packets [4:]
-						debug(packets)
-						IO.update(write_bytes(chunk, channels))
-						time.sleep(1/RATE)
-		except:
-			pass
-		time.sleep(1/2048.0)
+		conn, addr = s.accept()
+		with conn:
+			debug('Connected from' + str(addr))
+			while True:
+				data = conn.recv(4)
+				packets+=data
+
+				# if not data: break
+				# try: 
+				# 	for line in data.decode('UTF-8'):
+				# 		message = line.rstrip('\r\n')
+				# 		print(message)
+				# 		messages += message
+				# except:
+				# 	pass
+				
+				# for message in messages:
+				# 	if message == "close":
+				# 		debug("Closing connection...")
+				# 		conn.shutdown(socket.SHUT_RDWR)
+				# 		conn.close()
+				# 		break
+				# 	packets += message.encode()
+
+				# while len(packets) > 0 and len(packets) >= 4:
+				# 	packets, chunk = extract_bytes(packets, BYTES)
+				
+				chunk = packets[0:4]
+				packets = packets [4:]
+				IO.update(write_bytes(chunk, channels))
+				# 	time.sleep(1/RATE)
+
 
 if __name__ == '__main__':
 	main()
