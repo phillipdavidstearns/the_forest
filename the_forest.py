@@ -160,17 +160,17 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(4)
+				data = bytes(conn.recv(4))
 				packets+=data
 
-				# if not data: break
-				# try: 
-				# 	for line in data.decode('UTF-8'):
-				# 		message = line.rstrip('\r\n')
-				# 		print(message)
-				# 		messages += message
-				# except:
-				# 	pass
+				if not data: break
+				try: 
+					for line in data.decode('UTF-8'):
+						message = line.rstrip('\r\n')
+						print(message)
+						messages += message
+				except:
+					pass
 				
 				# for message in messages:
 				# 	if message == "close":
