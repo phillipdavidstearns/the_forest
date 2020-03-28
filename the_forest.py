@@ -71,21 +71,6 @@ def SIGTERM_handler(sig, frame):
 	shutdown(s, sig)
 
 #------------------------------------------------------------------------
-# IO up/down
-
-# replaced by IO.init()
-# def startupIO(pins, channels):
-# 	IO.init(pins, channels)
-# 	IO.clear()
-# 	IO.enable()
-
-# replaced by IO.stop()
-# def shutdownIO():
-# 	IO.disable()
-# 	IO.clear()
-# 	IO.cleanup()
-
-#------------------------------------------------------------------------
 # main
 
 def main():
@@ -162,8 +147,11 @@ def main():
 	addr=""
 
 	while True:
+		debug("Entering Loop")
 		try:
+			debug("Looking for connection...")
 			conn, addr = s.accept()
+			debug([conn, addr])
 			with conn:
 				debug('Connected from' + str(addr))
 				while True:
@@ -173,6 +161,7 @@ def main():
 						pass
 					if data:
 						packets+=data
+					debug(packets)
 					chunk = packets[0:4]
 					packets = packets [4:]
 					IO.update(write_bytes(chunk, channels))
