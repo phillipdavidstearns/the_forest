@@ -109,6 +109,7 @@ def main():
 	ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
 	ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
 	ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
+	ap.add_argument('-s', "--socket-blocking", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	args = ap.parse_args()
 
@@ -117,6 +118,7 @@ def main():
 	RATE = args.frame_rate
 	BYTES = args.frame_size
 	VERBOSE = args.verbose
+	SOCKET_BLOCKING = args.socket_blocking
 	HOST = ''
 	PORT = 31337
 
@@ -139,6 +141,7 @@ def main():
 		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
+	s.socket_blocking(SOCKET_BLOCKING)
 	s.listen(1)
 
 	packets = []
