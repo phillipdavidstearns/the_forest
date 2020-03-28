@@ -150,16 +150,14 @@ def main():
 			with conn:
 				debug('Connected from' + str(addr))
 				while True:
-					try:
-						data = conn.recv(65536)
-					except:
-						pass
+					data = conn.recv(65536)
 					if data:
 						packets.append(data)
 					while len(packets) > 0:
 						debug(packets)
 						chunk = packets[0:4]
 						packets = packets [4:]
+						debug(packets)
 						IO.update(write_bytes(chunk, channels))
 						time.sleep(1/RATE)
 		except:
