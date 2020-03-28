@@ -41,7 +41,7 @@ def extract_bytes(packets, qty):
 	return packets, chunk
 
 def write_bytes(data, channels):
-	channelStates=[]*channels
+	channelStates=[0]*channels
 	for i in range(len(data)):
 		b = data[i]
 		for j in range(8):
