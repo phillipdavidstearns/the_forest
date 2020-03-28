@@ -161,16 +161,14 @@ def main():
 			debug('Connected from' + str(addr))
 			while True:
 				data = bytes(conn.recv(4))
-				packets+=data
-
 				if not data: break
-				try: 
-					for line in data.decode('UTF-8'):
-						message = line.rstrip('\r\n')
-						print(message)
-						messages += message
-				except:
-					pass
+				# try: 
+				# 	for line in data.decode('UTF-8'):
+				# 		message = line.rstrip('\r\n')
+				# 		print(message)
+				# 		messages += message
+				# except:
+				# 	pass
 				
 				# for message in messages:
 				# 	if message == "close":
@@ -182,10 +180,12 @@ def main():
 
 				# while len(packets) > 0 and len(packets) >= 4:
 				# 	packets, chunk = extract_bytes(packets, BYTES)
-				
+				packets+=data
 				chunk = packets[0:4]
 				packets = packets [4:]
-				IO.update(write_bytes(chunk, channels))
+				lights = write_bytes(chunk, channels)
+				print(lights)
+				IO.update()
 				# 	time.sleep(1/RATE)
 
 
