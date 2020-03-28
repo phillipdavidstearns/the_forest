@@ -196,8 +196,8 @@ def main():
 					packets = packets [4:]
 					IO.update(write_bytes(chunk, channels))
 					time.sleep(1/RATE)
-			except:
-				pass
+		except:
+			pass
 		time.sleep(1/2048.0)
 
 if __name__ == '__main__':
