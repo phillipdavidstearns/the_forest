@@ -41,12 +41,13 @@ def extract_bytes(packets, qty):
 	return packets, chunk
 
 def write_bytes(data, channels):
-	channelStates=[0]*channels
+	print(len(data))
+	channelStates=[]
 	for i in range(len(data)):
 		b = data[i]
 		for j in range(8):
 			channelStates.append(b >> j & 1)
-	# print(channelStates)
+	print(channelStates)
 	return channelStates
 
 #------------------------------------------------------------------------
@@ -182,9 +183,9 @@ def main():
 				# 	packets, chunk = extract_bytes(packets, BYTES)
 				packets+=data
 				chunk = packets[0:4]
+				print(chunk)
 				packets = packets [4:]
 				lights = write_bytes(chunk, channels)
-				print(lights)
 				IO.update(lights)
 				# 	time.sleep(1/RATE)
 
