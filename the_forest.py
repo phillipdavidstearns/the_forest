@@ -61,21 +61,25 @@ def shutdown(s, sig):
 		print("Sutting down connection")
 		conn.shutdown(socket.SHUT_RDWR)
 	except:
+		print("That didn't work...")
 		pass
 	try:
 		print("Closing connection")
 		conn.close()
 	except:
+		print("That didn't work...")
 		pass
 	try:
 		print("Sutting down socket")
 		s.shutdown(socket.SHUT_RDWR)
 	except:
+		print("That didn't work...")
 		pass
 	try:
 		print("Closing socket")
 		s.close()
 	except:
+		print("That didn't work...")
 		pass
 	sys.exit(0)
 
