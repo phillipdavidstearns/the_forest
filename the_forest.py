@@ -144,16 +144,14 @@ def main():
 	IO.init(pins, channels)
 
 	while True:
-		debug("Entering Loop")
 		try:
-			debug("Looking for connection...")
 			conn, addr = s.accept()
 			debug([conn, addr])
 			with conn:
 				debug('Connected from' + str(addr))
 				while True:
 					try:
-						data = conn.recv(4)
+						data = conn.recv(65536)
 					except:
 						pass
 					if data:
