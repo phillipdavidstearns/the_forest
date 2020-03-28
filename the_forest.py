@@ -171,8 +171,8 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = bytes(conn.recv(4))
-				if not data: break
+				data = bytes(conn.recv(4096))
+				# if not data: break
 				# try: 
 				# 	for line in data.decode('UTF-8'):
 				# 		message = line.rstrip('\r\n')
