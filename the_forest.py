@@ -178,12 +178,14 @@ def main():
 				# 		conn.close()
 				# 		break
 				# 	packets += message.encode()
-				# # while len(packets) > 0 and len(packets) >= 4:
+
+				# while len(packets) > 0 and len(packets) >= 4:
+				# 	packets, chunk = extract_bytes(packets, BYTES)
+				
 				chunk = packets[0:4]
 				packets = packets [4:]
-				# packets, chunk = extract_bytes(packets, BYTES)
 				IO.update(write_bytes(chunk, channels))
-				# 	time.sleep(1/RATE)
+				time.sleep(1/RATE)
 
 
 if __name__ == '__main__':
