@@ -155,7 +155,7 @@ def main():
 					except:
 						pass
 					if data:
-						packets+=data
+						packets.append(data)
 					debug(packets)
 					chunk = packets[0:4]
 					packets = packets [4:]
