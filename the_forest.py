@@ -182,7 +182,9 @@ def main():
 				# while len(packets) > 0 and len(packets) >= 4:
 				# 	packets, chunk = extract_bytes(packets, BYTES)
 				packets+=data
-				chunk = packets[0:4]
+				chunk = packets[:4]
+				while len(chunk) < 4:
+					chunk.append(0)
 				print(chunk)
 				packets = packets [4:]
 				lights = write_bytes(chunk, channels)
