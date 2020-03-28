@@ -24,6 +24,7 @@ import CD4094 as IO
 
 # object for our socket
 s = object()
+conn = object()
 
 #------------------------------------------------------------------------
 #
@@ -56,8 +57,22 @@ def write_bytes(data, channels):
 def shutdown(s, sig):
 	print("")
 	IO.stop()
-	s.shutdown(socket.SHUT_RDWR)
-	s.close()
+	try:
+		conn.shutdown(socket.SHUT_RDWR)
+	except:
+		pass
+	try:
+		conn.close()
+	except:
+		pass
+	try:
+		s.shutdown(socket.SHUT_RDWR)
+	except:
+		pass
+	try:
+		s.close()
+	except:
+		pass
 	sys.exit(0)
 
 #------------------------------------------------------------------------
@@ -140,6 +155,8 @@ def main():
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
 	IO.init(pins, channels)
+
+	global conn
 
 	while True:
 		conn, addr = s.accept()
