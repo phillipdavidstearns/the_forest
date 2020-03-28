@@ -29,18 +29,6 @@ conn = object()
 #------------------------------------------------------------------------
 #
 
-def extract_bytes(packets, qty):
-	chunk = []*qty
-	# assemble bytes into chunk
-	for i in range(qty):
-		try:
-			_byte = packets[i]
-		except:
-			_byte = 0
-		chunk.append(_byte)
-	packets = packets[qty:]
-	return packets, chunk
-
 def write_bytes(data, channels):
 	channelStates=[]
 	for i in range(len(data)):
@@ -53,31 +41,22 @@ def write_bytes(data, channels):
 #
 
 def shutdown(s, sig):
-	print("")
 	IO.stop()
 	try:
-		print("Sutting down connection")
 		conn.shutdown(socket.SHUT_RDWR)
 	except:
-		print("That didn't work...")
 		pass
 	try:
-		print("Closing connection")
 		conn.close()
 	except:
-		print("That didn't work...")
 		pass
 	try:
-		print("Sutting down socket")
 		s.shutdown(socket.SHUT_RDWR)
 	except:
-		print("That didn't work...")
 		pass
 	try:
-		print("Closing socket")
 		s.close()
 	except:
-		print("That didn't work...")
 		pass
 	sys.exit(0)
 
@@ -169,26 +148,8 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(4096)
+				data = conn.recv(2048)
 				if not data: break
-				# try: 
-				# 	for line in data.decode('UTF-8'):
-				# 		message = line.rstrip('\r\n')
-				# 		print(message)
-				# 		messages += message
-				# except:
-				# 	pass
-				
-				# for message in messages:
-				# 	if message == "close":
-				# 		debug("Closing connection...")
-				# 		conn.shutdown(socket.SHUT_RDWR)
-				# 		conn.close()
-				# 		break
-				# 	packets += message.encode()
-
-				# while len(packets) > 0 and len(packets) >= 4:
-				# 	packets, chunk = extract_bytes(packets, BYTES)
 				packets+=data
 				chunk = packets[:4]
 				while len(chunk) < 4:
@@ -196,7 +157,6 @@ def main():
 				packets = packets [4:]
 				IO.update(write_bytes(chunk, channels))
 				time.sleep(1/RATE)
-
 
 if __name__ == '__main__':
 	main()
