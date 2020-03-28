@@ -158,6 +158,9 @@ def main():
 	pins = [ strobe, data, clock, enable ]
 	IO.init(pins, channels)
 
+	conn=object()
+	addr=""
+
 	while True:
 		try:
 			conn, addr = s.accept()
