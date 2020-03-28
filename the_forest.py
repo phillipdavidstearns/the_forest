@@ -164,40 +164,40 @@ def main():
 	while True:
 		try:
 			conn, addr = s.accept()
-		except:
-			pass
-		with conn:
-			debug('Connected from' + str(addr))
-			while True:
-				try:
-					data = conn.recv(4)
-				except:
-					pass
-				packets+=data
-				# if not data: break
-				# try: 
-				# 	for line in data.decode('UTF-8'):
-				# 		message = line.rstrip('\r\n')
-				# 		print(message)
-				# 		messages += message
-				# except:
-				# 	pass
-				
-				# for message in messages:
-				# 	if message == "close":
-				# 		debug("Closing connection...")
-				# 		conn.shutdown(socket.SHUT_RDWR)
-				# 		conn.close()
-				# 		break
-				# 	packets += message.encode()
+			with conn:
+				debug('Connected from' + str(addr))
+				while True:
+					try:
+						data = conn.recv(4)
+					except:
+						pass
+					packets+=data
+					# if not data: break
+					# try: 
+					# 	for line in data.decode('UTF-8'):
+					# 		message = line.rstrip('\r\n')
+					# 		print(message)
+					# 		messages += message
+					# except:
+					# 	pass
+					
+					# for message in messages:
+					# 	if message == "close":
+					# 		debug("Closing connection...")
+					# 		conn.shutdown(socket.SHUT_RDWR)
+					# 		conn.close()
+					# 		break
+					# 	packets += message.encode()
 
-				# while len(packets) > 0 and len(packets) >= 4:
-				# 	packets, chunk = extract_bytes(packets, BYTES)
-				
-				chunk = packets[0:4]
-				packets = packets [4:]
-				IO.update(write_bytes(chunk, channels))
-				time.sleep(1/RATE)
+					# while len(packets) > 0 and len(packets) >= 4:
+					# 	packets, chunk = extract_bytes(packets, BYTES)
+					
+					chunk = packets[0:4]
+					packets = packets [4:]
+					IO.update(write_bytes(chunk, channels))
+					time.sleep(1/RATE)
+			except
+				pass
 		time.sleep(1/2048.0)
 
 if __name__ == '__main__':
