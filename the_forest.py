@@ -141,7 +141,7 @@ def main():
 		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
-	s.blocking(SOCKET_BLOCKING)
+	s.setblocking(SOCKET_BLOCKING)
 	s.listen(1)
 
 	packets = []
@@ -163,7 +163,10 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(4)
+				try:
+					data = conn.recv(4)
+				except:
+					pass
 				packets+=data
 				# if not data: break
 				# try: 
