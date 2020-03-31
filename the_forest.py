@@ -100,7 +100,7 @@ def main():
 	IFACE = args.interface
 	CHUNK = args.chunk_size
 	RATE = args.frame_rate
-	BYTES = args.frame_size
+	FRAME_SIZE = args.frame_size
 	BUFFER_SIZE = args.frame_buffer 
 	VERBOSE = args.verbose
 	HOST = ''
