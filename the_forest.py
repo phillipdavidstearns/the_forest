@@ -29,7 +29,7 @@ conn = object()
 #------------------------------------------------------------------------
 #
 
-def write_bytes(data, channels):
+def bytes_to_bits(data, channels):
 	channelStates=[]
 	for i in range(len(data)):
 		b = data[i]
@@ -80,8 +80,6 @@ def main():
 		print("Must be run as root.")
 		sys.exit(1)
 
-	global s
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	# interrupt and terminate signal handling
 	signal(SIGINT, SIGINT_handler)
 	signal(SIGTERM, SIGTERM_handler)
@@ -92,9 +90,10 @@ def main():
 	ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
 	ap.add_argument("-l","--lhost-ip", default="", required=False, help="LHOST IP")
 	ap.add_argument("-p","--lhost-port", type=int, default=31337, required=False, help="LHOST PORT")
-	ap.add_argument("-c", "--chunk-size", type=float, default=2048, required=False, help="chunk size in frames") # not sure if I need this
+	ap.add_argument("-c", "--chunk-size", type=float, default=1024, required=False, help="chunk size in frames") # not sure if I need this
 	ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
-	ap.add_argument("-b", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
+	ap.add_argument("-s", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
+	ap.add_argument("-b", "--frame-buffer", type=int, default=16, required=False, help="number of bytes to display per frame")
 	ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	args = ap.parse_args()
 
@@ -102,6 +101,7 @@ def main():
 	CHUNK = args.chunk_size
 	RATE = args.frame_rate
 	BYTES = args.frame_size
+	BUFFER_SIZE = args.frame_buffer 
 	VERBOSE = args.verbose
 	HOST = ''
 	PORT = 31337
@@ -117,8 +117,9 @@ def main():
 		debug("Verbose mode. Displaying debug messeges")
 
 	# initalize TCP socket
-
 	# from example at https://docs.python.org/3.7/library/socket.html#example
+	global s
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
 		s.bind((HOST, PORT))
 	except:
@@ -148,16 +149,15 @@ def main():
 		with conn:
 			debug('Connected from' + str(addr))
 			while True:
-				data = conn.recv(1024)
+				data = conn.recv(CHUNK)
 				if not data: break
 				packets+=data
-				while len(packets) > 16:
-					chunk = packets[:4]
-					print(chunk)
-					while len(chunk) < 4:
-						chunk.append(0)
-					packets = packets [4:]
-					IO.update(write_bytes(chunk, channels))
+				while len(packets) > BUFFER_SIZE:
+					block = packets[:FRAME_SIZE]
+					while len(block) < FRAME_SIZE:
+						block.append(0)
+					packets = packets [FRAME_SIZE:]
+					IO.update(bytes_to_bits(block, channels))
 					time.sleep(1/RATE)
 
 if __name__ == '__main__':
