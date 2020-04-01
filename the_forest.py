@@ -154,13 +154,13 @@ def main():
 				packets += data
 				while len(packets) > BUFFER_SIZE:
 					block = packets[:FRAME_SIZE]
-					current_time = time.time()
+					start_time = time.time()
 					while len(block) < FRAME_SIZE:
 						block.append(0)
 					packets = packets [FRAME_SIZE:]
 					IO.update(bytes_to_bits(block, channels))
-					while time.time() - current_time < 1/RATE:
-						time.sleep(.01)
+					stop_time = time.time()
+					time.sleep((1/RATE) - ( stop_time - start_time ))
 
 if __name__ == '__main__':
 	main()
