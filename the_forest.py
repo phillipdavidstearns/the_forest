@@ -160,7 +160,7 @@ def main():
 					packets = packets [FRAME_SIZE:]
 					IO.update(bytes_to_bits(block, channels))
 					while time.time() - current_time < 1/RATE:
-						time.sleep(.001)
+						time.sleep(.01)
 
 if __name__ == '__main__':
 	main()
