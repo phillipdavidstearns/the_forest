@@ -151,14 +151,16 @@ def main():
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
-				packets+=data
+				packets += data
 				while len(packets) > BUFFER_SIZE:
 					block = packets[:FRAME_SIZE]
+					current_time = time.time()
 					while len(block) < FRAME_SIZE:
 						block.append(0)
 					packets = packets [FRAME_SIZE:]
 					IO.update(bytes_to_bits(block, channels))
-					time.sleep(1/RATE)
+					while time.time() - current_time < 1/RATE:
+						pass
 
 if __name__ == '__main__':
 	main()
