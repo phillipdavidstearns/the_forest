@@ -57,6 +57,7 @@ def SIGTERM_handler(sig, frame):
 def main():
 
 	lfsr = ShiftRegister()
+	lfsr.setBit(0,1)
 
 	if os.getuid() != 0:
 		print("Must be run as root.")
