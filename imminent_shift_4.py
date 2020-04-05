@@ -103,7 +103,7 @@ def main():
 
 	while True:
 		start_time = time.time()
-		output=lfsr.leftShift()
+		output=lfsr.lfsrLeft()
 		print(output)
 		IO.update(output)
 		stop_time = time.time()
