@@ -14,24 +14,11 @@
 
 import os
 import sys
-import subprocess
 import argparse
 from signal import *
 import time
-import select
 import CD4094 as IO
 from ShiftRegister import ShiftRegister
-
-#------------------------------------------------------------------------
-#
-
-def bytes_to_bits(data, channels):
-	channelStates=[]
-	for i in range(len(data)):
-		b = data[i]
-		for j in range(8):
-			channelStates.append(b >> j & 1)
-	return channelStates
 
 #------------------------------------------------------------------------
 #
@@ -57,7 +44,7 @@ def SIGTERM_handler(sig, frame):
 def main():
 
 	lfsr = ShiftRegister()
-	lfsr.setBit(0,1)
+	lfsr.randomize()
 
 	if os.getuid() != 0:
 		print("Must be run as root.")
@@ -87,8 +74,6 @@ def main():
 	if VERBOSE:
 		debug("Verbose mode. Displaying debug messeges")
 
-	# initalize TCP socket
-	# from example at https://docs.python.org/3.7/library/socket.html#example
 	
 	channels = 32 # number of output channels
 

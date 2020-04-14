@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+from random import randint
 
 class ShiftRegister:
 
@@ -20,6 +20,10 @@ class ShiftRegister:
 				self.register[Q] = 0
 			else:
 				self.register[Q] = 1
+	def randomize(self):
+		for i in range(len(self.register)):
+			self.register[i] = randint(0,1)
+		return self.register
 
 	def getBit(self, Q):
 		if Q < len(self.register):
@@ -47,16 +51,17 @@ class ShiftRegister:
 		self.register = temp
 		return self.register
 
-	def lfsrLeft(self):
+	def lfsrLeft(self, data=-1):
 		t1 = self.register[self.tap1] & self.tap1_en
 		t2 = self.register[self.tap2] & self.tap2_en
 		data = t1 ^ t2
 		self.shiftLeft(data)
 		return self.register
 
-	def lfsrRight(self):
-		t1 = self.register[self.tap1] & self.tap1_en
-		t2 = self.register[self.tap2] & self.tap2_en
-		data = t1 ^ t2
+	def lfsrRight(self, data=-1):
+		if data = -1:
+			t1 = self.register[self.tap1] & self.tap1_en
+			t2 = self.register[self.tap2] & self.tap2_en
+			data = t1 ^ t2
 		self.shiftRight(data)
 		return self.register
