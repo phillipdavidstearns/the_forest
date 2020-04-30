@@ -137,7 +137,7 @@ def main():
 	strobe = 17 # latch strobe GPIO pin
 	data = 27 # data GPIO pin
 	clock = 22 # clock GPIO pin
-	enable = 23 # IOister enable GPIO pin
+	enable = 23 # enable GPIO pin
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
 	IO.init(pins, channels)
