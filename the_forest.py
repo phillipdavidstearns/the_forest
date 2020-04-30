@@ -38,7 +38,7 @@ def bytes_to_bits(data, channels):
 	return channelStates
 
 #------------------------------------------------------------------------
-#
+#	Shutdown for clean exit
 
 def shutdown(s, sig):
 	IO.stop()
@@ -87,24 +87,22 @@ def main():
 	#-------------------------------------------------------------------
 	# argument stuff
 	ap = argparse.ArgumentParser()
-	ap.add_argument("-i", "--interface", default="wlan0", required=False, help="[if]")
-	ap.add_argument("-l","--lhost-ip", default="", required=False, help="LHOST IP")
-	ap.add_argument("-p","--lhost-port", type=int, default=31337, required=False, help="LHOST PORT")
-	ap.add_argument("-c", "--chunk-size", type=float, default=1024, required=False, help="chunk size in frames") # not sure if I need this
+	ap.add_argument("-l","--lhost", default="", required=False, help="LHOST IP")
+	ap.add_argument("-p","--lport", type=int, default=31337, required=False, help="LHOST PORT")
+	ap.add_argument("-c", "--chunk-size", type=int, default=1024, required=False, help="chunk size in bytes")
 	ap.add_argument("-r", "--frame-rate", type=float, default=30, required=False, help="frames per second")
 	ap.add_argument("-s", "--frame-size", type=int, default=4, required=False, help="number of bytes to display per frame")
-	ap.add_argument("-b", "--frame-buffer", type=int, default=16, required=False, help="number of bytes to display per frame")
+	ap.add_argument("-b", "--frame-buffer", type=int, default=4, required=False, help="number of bytes stored prior to updating")
 	ap.add_argument('-v', "--verbose", action='store_true', default=False, help='Verbose mode. Display debug messages')
 	args = ap.parse_args()
 
-	IFACE = args.interface
+	HOST = args.lhost
+	PORT = args.lport
 	CHUNK = args.chunk_size
 	RATE = args.frame_rate
 	FRAME_SIZE = args.frame_size
 	BUFFER_SIZE = args.frame_buffer 
 	VERBOSE = args.verbose
-	HOST = ''
-	PORT = 31337
 
 	#------------------------------------------------------------------------
 	#	verbose or debug mode
@@ -140,7 +138,7 @@ def main():
 	enable = 23 # enable GPIO pin
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
-	IO.init(pins, channels)
+	IO.init(pins, channels) #initializes Raspberry Pi GPIO wrapper for controlling CD4094
 
 	global conn
 
