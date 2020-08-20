@@ -14,12 +14,10 @@
 
 import os
 import sys
-import subprocess
 import argparse
 from signal import *
 import socket
 import time
-import select
 import CD4094 as IO
 
 # object for our socket
@@ -29,7 +27,7 @@ conn = object()
 #------------------------------------------------------------------------
 #
 
-def bytes_to_bits(data, channels):
+def bytes_to_bits(data):
 	channelStates=[]
 	for i in range(len(data)):
 		b = data[i]
@@ -45,19 +43,19 @@ def shutdown(s, sig):
 	try:
 		conn.shutdown(socket.SHUT_RDWR)
 	except:
-		pass
+		print("[!] Failed to shutdown connection.")
 	try:
 		conn.close()
 	except:
-		pass
+		print("[!] Failed to close connection.")
 	try:
 		s.shutdown(socket.SHUT_RDWR)
 	except:
-		pass
+		print("[!] Failed to shutdown socket.")
 	try:
 		s.close()
 	except:
-		pass
+		print("[!] Failed to close socket.")
 	sys.exit(0)
 
 #------------------------------------------------------------------------
@@ -77,7 +75,7 @@ def SIGTERM_handler(sig, frame):
 def main():
 
 	if os.getuid() != 0:
-		print("Must be run as root.")
+		print("[!] Must be run as root.")
 		sys.exit(1)
 
 	# interrupt and terminate signal handling
@@ -112,7 +110,7 @@ def main():
 			print(message)
 
 	if VERBOSE:
-		debug("Verbose mode. Displaying debug messeges")
+		debug("[*] Verbose mode. Displaying debug messeges")
 
 	# initalize TCP socket
 	# from example at https://docs.python.org/3.7/library/socket.html#example
@@ -121,21 +119,21 @@ def main():
 	try:
 		s.bind((HOST, PORT))
 	except:
-		print("Could not bind socket"+ str(HOST) +":" +str(PORT))
+		print("[!] Could not bind socket"+ str(HOST) +":" +str(PORT))
 		s.close()
 		sys.exit(1)
 	s.listen(1)
 
 	packets = []
 
-	channels = 32 # number of output channels
+	channels = FRAME_SIZE * 8 # number of output channels
 
-	# Pin assignments
-	# outputs
+	# GPIO BCM pin assignments
 	strobe = 17 # latch strobe GPIO pin
 	data = 27 # data GPIO pin
 	clock = 22 # clock GPIO pin
 	enable = 23 # IOister enable GPIO pin
+	
 	# make composite lists to pass along to IO
 	pins = [ strobe, data, clock, enable ]
 	IO.init(pins, channels) #initializes Raspberry Pi GPIO wrapper for controlling CD4094
@@ -145,7 +143,7 @@ def main():
 	while True:
 		conn, addr = s.accept()
 		with conn:
-			debug('Connected from' + str(addr))
+			debug('[+] Connected from' + str(addr))
 			while True:
 				data = conn.recv(CHUNK)
 				if not data: break
@@ -156,7 +154,7 @@ def main():
 					while len(block) < FRAME_SIZE:
 						block.append(0)
 					packets = packets [FRAME_SIZE:]
-					IO.update(bytes_to_bits(block, channels))
+					IO.update(bytes_to_bits(block))
 					stop_time = time.time()
 					time.sleep((1/RATE) - ( stop_time - start_time ))
 
