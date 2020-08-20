@@ -2,7 +2,7 @@
 
 #------------------------------------------------------
 #
-# the_forest.py
+# wifi_traffic.py
 #
 # A script to translate network traffic into lighting control
 # should be run on a raspberry pi.
