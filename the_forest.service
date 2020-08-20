@@ -1,5 +1,5 @@
 [Unit]
-Description=the_forest: a network traffic visualizer
+Description=the_forest: a networked lighting control system
 After=network.target
 
 [Service]
